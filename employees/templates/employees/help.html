@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System User Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #020304; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; padding: 40px 0; perspective: 1400px; }
+        .grid-overlay { position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background-image: linear-gradient(rgba(32, 201, 151, 0.015) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(32, 201, 151, 0.015) 1.5px, transparent 1px); background-size: 40px 40px; transform: rotateX(65deg) translateZ(-150px); pointer-events: none; z-index: 0; }
+        .help-card { background: rgba(13, 17, 23, 0.8) !important; border: 2px solid #20c997 !important; border-radius: 20px !important; backdrop-filter: blur(15px); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85); max-width: 750px; margin: 0 auto; }
+        .help-section-box { background: rgba(22, 27, 34, 0.65); border: 1px solid rgba(255, 255, 255, 0.04); border-left: 4px solid #20c997; border-radius: 4px; padding: 16px 20px; margin-bottom: 20px; font-family: monospace; }
+    </style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+<div class="container" style="position: relative; z-index: 1;">
+    <div class="card help-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+            <h4 class="fw-bold text-success font-monospace m-0">
+                <i class="bi bi-terminal-box-fill me-2"></i> SYSTEM INTERFACE DIRECTORY MANUAL / यूजर गाइड
+            </h4>
+            <a href="/dashboard/" class="btn btn-outline-secondary btn-sm font-monospace text-white border-secondary">
+                <i class="bi bi-arrow-left"></i> BACK
+            </a>
+        </div>
+        
+        <div class="help-section-box">
+            <h6 class="text-white fw-bold mb-2 text-uppercase"><i class="bi bi-cpu-fill text-success me-2"></i>1. Dashboard Overview / डैशबोर्ड की जानकारी</h6>
+            <span class="text-info d-block mb-1">[English]</span>
+            <p class="text-white-50 mb-3">This panel streams dynamic headcount metrics and database visualizations. The cards display your total metrics instantly, and the graphs map out statistics compiled across all records.</p>
+            <span class="text-warning d-block mb-1">[हिंदी]</span>
+            <p class="text-white-50 m-0">यह पैनल आपकी कंपनी के कुल एम्प्लोयी डेटा को ग्राफ और चार्ट के रूप में दिखाता है। ऊपर बने कार्ड्स से आप कुल कर्मचारी (Total Headcount) और एक्टिव लोगों की संख्या तुरंत देख सकते हैं।</p>
+        </div>
+
+        <div class="help-section-box" style="border-left-color: #0d6efd;">
+            <h6 class="text-white fw-bold mb-2 text-uppercase"><i class="bi bi-people-fill text-primary me-2"></i>2. Management Actions / बदलाव और नया डेटा जोड़ना</h6>
+            <span class="text-info d-block mb-1">[English]</span>
+            <p class="text-white-50 mb-3">To add or edit records, go to the left side menu and click <strong>"STAFF_LIST"</strong>. In that page, you can click "Sync New Record" to register an employee. Click on any employee's name to see their profile details and profile picture.</p>
+            <span class="text-warning d-block mb-1">[हिंदी]</span>
+            <p class="text-white-50 m-0">नया एम्प्लोयी जोड़ने, पुराना डेटा बदलने या हटाने के लिए बाईं तरफ बने मेनू में <strong>"STAFF_LIST"</strong> पर क्लिक करें। वहां ऊपर बटन से नया रिकॉर्ड जोड़ सकते हैं। किसी के नाम पर क्लिक करके आप उसकी पूरी प्रोफाइल और फोटो देख सकते हैं।</p>
+        </div>
+
+        <div class="help-section-box" style="border-left-color: #ffc107;">
+            <h6 class="text-white fw-bold mb-2 text-uppercase"><i class="bi bi-info-circle-fill text-warning me-2"></i>3. System Parameters Definition / शब्दों का मतलब</h6>
+            <ul class="list-unstyled text-white-50 ps-1 m-0">
+                <li class="mb-2"><strong class="text-white">Attrition Loss:</strong> Employees who have left or disconnected from the core system rows. (कंपनी छोड़ चुके लोगों की कुल संख्या)।</li>
+                <li class="mb-2"><strong class="text-white">Performance Index:</strong> Performance metrics tracked dynamically on a scale out of 10.0 points. (10 में से कर्मचारियों के परफॉर्मेंस का लाइव स्कोर)।</li>
+                <li class="mb-2"><strong class="text-white">MOD_NODE / WIPE_NODE:</strong> Buttons on the staff list screen used to update information or delete records completely. (डेटा में सुधार करने या रिकॉर्ड को पूरी तरह डिलीट करने के ऑप्शंस)।</li>
+            </ul>
+        </div>
+
+        <div class="help-section-box" style="border-left-color: #dc3545;">
+            <h6 class="text-white fw-bold mb-2 text-uppercase"><i class="bi bi-gear-fill text-danger me-2"></i>4. Custom Departments Rule / मनचाहा डिपार्टमेंट सेट करना</h6>
+            <span class="text-info d-block mb-1">[English]</span>
+            <p class="text-white-50 mb-3">When filling out or updating forms, if you select "Other" from the department choice drop-down menu, an extra text field will instantly open on screen. You can type any completely new custom department name into that box.</p>
+            <span class="text-warning d-block mb-1">[हिंदी]</span>
+            <p class="text-white-50 m-0">फॉर्म भरते या बदलते समय, अगर आप डिपार्टमेंट लिस्ट में से "Other" चुनते हैं, तो स्क्रीन पर तुरंत एक नया खाली बॉक्स खुल जाएगा। आप उस बॉक्स में अपनी मर्ज़ी से किसी भी नए डिपार्टमेंट का नाम टाइप कर सकते हैं।</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

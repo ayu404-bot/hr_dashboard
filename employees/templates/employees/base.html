@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Central Matrix Directory{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #070c14;
+            --surface: rgba(9, 15, 26, 0.96);
+            --surface-soft: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e9edf5;
+            --text-muted: #96a4b5;
+            --accent: #33c2a3;
+            --accent-strong: #1ca88f;
+            --shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
+            --danger: #ff6b78;
+        }
+        [data-theme="light"] {
+            --bg: #eff4fb;
+            --surface: rgba(255, 255, 255, 0.98);
+            --surface-soft: rgba(13, 110, 253, 0.06);
+            --border: rgba(15, 23, 42, 0.08);
+            --text: #111827;
+            --text-muted: #475569;
+            --accent: #0d6efd;
+            --accent-strong: #0b5ed7;
+            --shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
+            --danger: #dc2626;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top, rgba(10, 18, 32, 1) 0%, var(--bg) 70%);
+            overflow-x: hidden;
+        }
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--surface-soft) 1px, transparent 1px),
+                linear-gradient(90deg, var(--surface-soft) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.42;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Modifying shell to handle full-screen login layout */
+        .page-shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Full-screen wrapper for Unauthenticated lock state */
+        .auth-gate-shell {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, rgba(7, 12, 23, 0.98), rgba(13, 18, 29, 0.98));
+            border-right: 1px solid var(--border);
+            box-shadow: 6px 0 40px rgba(0, 0, 0, 0.18);
+            padding: 30px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+            min-height: 100vh;
+        }
+        .brand-panel {
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 22px;
+        }
+        .brand-panel h2 {
+            margin: 0.65rem 0 0.1rem;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+        .brand-panel p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.79rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .nav-links { display: grid; gap: 6px; }
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            color: var(--text-muted) !important;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(51, 194, 163, 0.12);
+            color: var(--accent) !important;
+            transform: translateX(2px);
+        }
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .theme-toggle:hover { background: rgba(51, 194, 163, 0.12); color: var(--accent); }
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .sidebar-footer a { color: var(--danger) !important; font-weight: 700; }
+        .main-content {
+            padding: 34px 36px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+        .page-title {
+            margin: 0;
+            font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text);
+        }
+        .page-description {
+            margin: 0.55rem 0 0;
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            max-width: 72ch;
+            line-height: 1.7;
+        }
+        .header-actions { display:flex; flex-wrap:wrap; gap:12px; }
+        
+        /* Authentication Box Design matching your theme UI */
+        .matrix-auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(12px);
+        }
+
+        .card-surface,
+        .table-surface,
+        .form-card,
+        .control-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .card-surface { padding: 26px; }
+        .card-surface-sm { padding: 20px; }
+        .form-card { padding: 28px; }
+        .section-title {
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+            letter-spacing: 0.16em;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .table-surface { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .table-surface th,
+        .table-surface td { border: none; vertical-align: middle; }
+        .table-surface th {
+            color: var(--accent);
+            letter-spacing: 0.12em;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 20px 18px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .table-surface td {
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+            padding: 18px;
+            border-radius: 16px;
+        }
+        .table-surface tbody tr:hover td { background: rgba(51, 194, 163, 0.08); }
+        .table-surface tbody tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        .table-surface tbody tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        
+        .btn-primary-accent {
+            background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+            color: #fff !important;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 14px 28px rgba(51, 194, 163, 0.22);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .btn-primary-accent:hover { transform: translateY(-1px); box-shadow: 0 20px 35px rgba(51, 194, 163, 0.28); }
+        .btn-secondary-soft {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .form-control,
+        .form-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 12px 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-control:focus,
+        .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(51, 194, 163, 0.12); background: rgba(255,255,255,0.07); color: var(--text); }
+        .form-control::placeholder { color: rgba(255,255,255,0.35); }
+        
+        .auth-toggle-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-toggle-link:hover { text-decoration: underline; }
+
+        .alert-soft {
+            background: rgba(255, 107, 120, 0.1);
+            border: 1px solid rgba(255, 107, 120, 0.2);
+            color: #ffd8de;
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.5rem 0.95rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        .status-active { background: rgba(51, 194, 163, 0.16); color: #d3fff0; }
+        .status-left { background: rgba(255, 107, 120, 0.16); color: #ffd8de; }
+        .form-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; margin-top: 24px; }
+        @media (max-width: 1199px) {
+            .page-shell { grid-template-columns: 1fr; }
+            .sidebar { min-height: auto; width: 100%; }
+            .main-content { padding: 24px 20px; }
+        }
+        @media (max-width: 767px) {
+            .sidebar { display: none; }
+            .page-header { align-items: flex-start; }
+            .page-title { font-size: 1.75rem; }
+        }
+
+        /* ==========================================================
+           GLOBAL LIGHT MODE ENFORCEMENT RULES (FOR DASHBOARD, HELP, ETC)
+           ========================================================== */
+        [data-theme="light"] body,
+        [data-theme="light"] .main-content {
+            background: #eff4fb !important;
+            color: #111827 !important;
+        }
+        [data-theme="light"] .sidebar {
+            background: linear-gradient(180deg, #ffffff, #f8fafc) !important;
+            border-right: 1px solid #e2e8f0 !important;
+        }
+        [data-theme="light"] .stat-card,
+        [data-theme="light"] .telemetry-card,
+        [data-theme="light"] .instructor-panel,
+        [data-theme="light"] .ai-avatar-box,
+        [data-theme="light"] .help-card,
+        [data-theme="light"] .help-section-box,
+        [data-theme="light"] .matrix-auth-card {
+            background: #ffffff !important;
+            color: #111827 !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05) !important;
+        }
+        [data-theme="light"] h1, 
+        [data-theme="light"] h2, 
+        [data-theme="light"] h3, 
+        [data-theme="light"] h4, 
+        [data-theme="light"] h5, 
+        [data-theme="light"] h6,
+        [data-theme="light"] .text-white,
+        [data-theme="light"] .cyber-logo-icon,
+        [data-theme="light"] .brand-panel h2 {
+            color: #111827 !important;
+            text-shadow: none !important;
+        }
+        [data-theme="light"] .text-muted,
+        [data-theme="light"] .text-white-50,
+        [data-theme="light"] small,
+        [data-theme="light"] .form-label {
+            color: #64748b !important;
+        }
+        [data-theme="light"] .form-control {
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #111827 !important;
+        }
+        [data-theme="light"] .form-control::placeholder { color: #94a3b8 !important; }
+    </style>
+    <script>
+        const initialThemeSetting = localStorage.getItem('matrix-system-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', initialThemeSetting);
+    </script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+
+{% if user.is_authenticated %}
+    <div class="page-shell">
+        <aside class="sidebar">
+            <div class="brand-panel">
+                <div class="d-flex align-items-center justify-content-start" style="gap: 12px;">
+                    <div class="rounded-circle" style="width: 44px; height: 44px; background: rgba(51, 194, 163, 0.14); display: grid; place-items: center;">
+                        <i class="bi bi-grid-3x3-gap-fill" style="color: var(--accent);"></i>
+                    </div>
+                    <div>
+                        <h2>MatrixHR</h2>
+                        <p>Control Center</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="bi bi-house-door-fill"></i> Home</a>
+                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a href="{% url 'employee_list' %}" class="{% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}"><i class="bi bi-people-fill"></i> Employees</a>
+                <a href="{% url 'recycle_bin' %}" class="{% if request.resolver_match.url_name == 'recycle_bin' %}active{% endif %}"><i class="bi bi-trash3 me-2"></i> Recycle Bin</a>
+                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}"><i class="bi bi-info-circle"></i> About</a>
+            </nav>
+
+            <button class="theme-toggle" type="button" onclick="toggleSystemTheme()">
+                <i class="bi bi-sun-fill"></i>
+                <span id="themeToggleLabelText">Switch Theme</span>
+            </button>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'logout' %}" class="nav-flex align-items-center gap-2" style="text-decoration: none;">
+                    <i class="bi bi-box-arrow-right"></i> Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <h1 class="page-title">{% block page_title %}Central Matrix Directory{% endblock %}</h1>
+                    <p class="page-description">{% block page_description %}Secure employee records, analytics, and administration in one polished view.{% endblock %}</p>
+                </div>
+                <div class="header-actions">{% block header_actions %}{% endblock %}</div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+{% else %}
+    <div class="auth-gate-shell">
+        <div class="matrix-auth-card">
+            <div class="text-center mb-4">
+                <div class="rounded-circle d-inline-grid mb-2" style="width: 54px; height: 54px; background: rgba(51, 194, 163, 0.14); place-items: center;">
+                    <i class="bi bi-shield-lock-fill" style="color: var(--accent); font-size: 1.5rem;"></i>
+                </div>
+                <h3 class="fw-bold m-0" style="letter-spacing: -0.02em;">MatrixHR Secure Gateway</h3>
+                <p class="text-muted small mt-1 text-uppercase" style="letter-spacing: 0.1em;">Authorization Required</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-soft"><i class="bi bi-exclamation-triangle-fill me-2"></i> {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div id="login-module">
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Corporate Identity</label>
+                        <input type="text" name="username" class="form-control" placeholder="Username or Email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Security Access Key</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary-accent w-100 mb-3">Initialize Portal Connection</button>
+                </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted small">New personnel? <a class="auth-toggle-link" id="switchToRegister">Request System Node</a></span>
+                </div>
+            </div>
+
+            <div id="register-module" style="display: none;">
+                <form method="POST" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Full Account Name</label>
+                        <input type="text" name="fullname" class="form-control" placeholder="e.g., Akansha Sharma" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Corporate Email Node</label>
+                        <input type="email" name="email" class="form-control" placeholder="username@domain.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Establish Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary-accent w-100 mb-3">Deploy Account Credentials</button>
+                </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted small">Already recognized? <a class="auth-toggle-link" id="switchToLogin">Access Node Key</a></span>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
+                <button class="theme-toggle w-100 justify-content-center" type="button" onclick="toggleSystemTheme()">
+                    <i class="bi bi-sun-fill"></i>
+                    <span id="themeToggleLabelTextGate">Switch Theme</span>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        updateThemeSelectorLabels(currentTheme);
+
+        // Client-side authentication component toggle handler
+        const toRegisterBtn = document.getElementById('switchToRegister');
+        const toLoginBtn = document.getElementById('switchToLogin');
+        const loginModule = document.getElementById('login-module');
+        const registerModule = document.getElementById('register-module');
+
+        if (toRegisterBtn && toLoginBtn) {
+            toRegisterBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginModule.style.display = 'none';
+                registerModule.style.display = 'block';
+            });
+
+            toLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerModule.style.display = 'none';
+                loginModule.style.display = 'block';
+            });
+        }
+    });
+
+    function toggleSystemTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', targetTheme);
+        localStorage.setItem('matrix-system-theme', targetTheme);
+        updateThemeSelectorLabels(targetTheme);
+    }
+
+    function updateThemeSelectorLabels(theme) {
+        const labelSidebar = document.getElementById('themeToggleLabelText');
+        const labelGate = document.getElementById('themeToggleLabelTextGate');
+        const icons = document.querySelectorAll('.theme-toggle i');
+        
+        let targetText = theme === 'light' ? 'Dark Mode' : 'Light Mode';
+        let targetClass = theme === 'light' ? "bi bi-moon-stars-fill" : "bi bi-sun-fill";
+
+        if (labelSidebar) labelSidebar.textContent = targetText;
+        if (labelGate) labelGate.textContent = targetText;
+        
+        icons.forEach(icon => {
+            icon.className = targetClass;
+        });
+    }
+</script>
+</body>
+</html>

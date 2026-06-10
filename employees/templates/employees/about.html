@@ -1,0 +1,220 @@
+{% extends 'employees/base.html' %}
+
+{% block title %}About MatrixHR{% endblock %}
+{% block page_title %}About the system{% endblock %}
+{% block page_description %}MatrixHR is a professional HR analytics platform built for secure staff records, intuitive workflows, and polished reporting.{% endblock %}
+
+{% block content %}
+
+<style>
+.card-surface{
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(0,255,255,.15);
+    transition:all .35s ease;
+}
+
+.card-surface::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:2px;
+    background:linear-gradient(
+        90deg,
+        #00ffff,
+        #8b5cf6,
+        #00ffff
+    );
+}
+
+.card-surface:hover{
+    transform:translateY(-5px);
+    box-shadow:
+        0 0 20px rgba(0,255,255,.15),
+        0 0 40px rgba(139,92,246,.1);
+}
+
+.card-surface-sm{
+    border:1px solid rgba(0,255,255,.1);
+    transition:all .3s ease;
+}
+
+.card-surface-sm:hover{
+    transform:translateY(-5px);
+    border-color:#00ffff;
+    box-shadow:0 0 20px rgba(0,255,255,.15);
+}
+
+.tech-icon{
+    width:50px;
+    height:50px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    margin-bottom:12px;
+    background:rgba(0,255,255,.08);
+    border:1px solid rgba(0,255,255,.2);
+}
+
+.cyber-title{
+    color:#00ffff;
+    letter-spacing:1px;
+}
+
+.status-chip{
+    box-shadow:0 0 15px rgba(0,255,255,.25);
+}
+
+.summary-item{
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.summary-item:last-child{
+    border-bottom:none;
+}
+</style>
+
+<div class="row g-4">
+
+    <div class="col-xl-8">
+        <div class="card-surface p-4">
+
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+
+                <div>
+                    <small class="text-uppercase cyber-title fw-bold">
+                        SYSTEM ARCHITECTURE
+                    </small>
+
+                    <h2 class="h4 text-white mb-2">
+                        MatrixHR Core Platform
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Advanced workforce intelligence powered by secure technologies and modern HR analytics.
+                    </p>
+                </div>
+
+                <span class="status-chip status-active">
+                    Stable Release v2.0
+                </span>
+
+            </div>
+
+            <p class="text-muted" style="line-height:1.9;">
+                MatrixHR combines secure employee data management, intelligent analytics,
+                workforce monitoring, and reporting tools into a unified HR ecosystem.
+                Built with scalability, security, and performance in mind.
+            </p>
+
+            <div class="row g-3 mt-4">
+
+                <div class="col-sm-4">
+                    <div class="card-surface-sm p-3 h-100">
+
+                        <div class="tech-icon">
+                            ⚙️
+                        </div>
+
+                        <h5 class="mb-2 text-white">
+                            Django Engine
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            Secure backend architecture built with Python and Django.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card-surface-sm p-3 h-100">
+
+                        <div class="tech-icon">
+                            🗄️
+                        </div>
+
+                        <h5 class="mb-2 text-white">
+                            Data Vault
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            Efficient employee record storage with reliable database operations.
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="card-surface-sm p-3 h-100">
+
+                        <div class="tech-icon">
+                            🌐
+                        </div>
+
+                        <h5 class="mb-2 text-white">
+                            Smart Interface
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            Responsive dashboard experience across all modern devices.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card-surface p-4">
+
+            <h5 class="text-white mb-4">
+                Platform Summary
+            </h5>
+
+            <div class="summary-item text-muted">
+                ✓ Employee Lifecycle Management
+            </div>
+
+            <div class="summary-item text-muted">
+                ✓ Real-Time Analytics Dashboard
+            </div>
+
+            <div class="summary-item text-muted">
+                ✓ Secure Record Administration
+            </div>
+
+            <div class="summary-item text-muted">
+                ✓ Export & Reporting Engine
+            </div>
+
+            <div class="summary-item text-muted">
+                ✓ Responsive User Experience
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <div class="text-center">
+                <h3 class="cyber-title fw-bold mb-1">
+                    99.9%
+                </h3>
+
+                <small class="text-muted">
+                    System Availability
+                </small>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Profile Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #020304; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; padding: 60px 0; perspective: 1400px; }
+        .grid-overlay { position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background-image: linear-gradient(rgba(0, 210, 255, 0.015) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(0, 210, 255, 0.015) 1.5px, transparent 1px); background-size: 40px 40px; transform: rotateX(65deg) translateZ(-150px); pointer-events: none; z-index: 0; }
+        .profile-card { background: rgba(13, 17, 23, 0.75) !important; border: 2px solid #00d2ff !important; border-radius: 20px !important; backdrop-filter: blur(15px); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85); max-width: 600px; margin: 0 auto; transform: rotateY(1deg) translateZ(10px); }
+        .avatar-frame { width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00d2ff; background: #1f242e; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #00d2ff; box-shadow: 0 0 20px rgba(0, 210, 255, 0.4); margin: 0 auto 20px auto; overflow: hidden; }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .data-label { font-size: 10px; font-family: monospace; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+        .data-value { font-size: 16px; font-family: 'Courier New', Courier, monospace; color: #ffffff; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+<div class="container" style="position: relative; z-index: 1;">
+    <div class="card profile-card p-4 text-center">
+        <div class="text-start mb-3">
+            <a href="/employees/" class="btn btn-outline-info btn-sm"><i class="bi bi-arrow-left"></i> Registry</a>
+        </div>
+        
+        <div class="avatar-frame">
+            {% if employee.profile_pic %}
+                <img src="{{ employee.profile_pic.url }}" alt="Profile Pic">
+            {% else %}
+                <i class="bi bi-person-bounding-box"></i>
+            {% endif %}
+        </div>
+        
+        <h3 class="fw-bold tracking-wide mb-1 text-uppercase text-white">{{ employee.name }}</h3>
+        <span class="badge bg-dark border border-info text-info font-monospace mb-4">AGENT_ID // #00{{ employee.id }}</span>
+        
+        <div class="row text-start mt-2 px-3">
+            <div class="col-md-6">
+                <div class="data-label">Email Endpoint</div>
+                <div class="data-value">{{ employee.email }}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-label">Assigned Department</div>
+                <div class="data-value text-info">{{ employee.department }}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-label">Salary Allocation</div>
+                <div class="data-value text-success">₹{{ employee.salary }}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="data-label">Performance Metric Matrix</div>
+                <div class="data-value text-warning"><i class="bi bi-cpu-fill"></i> {{ employee.performance_score }} / 10.0</div>
+            </div>
+            <div class="col-12">
+                <div class="data-label">Operational System Status</div>
+                <div class="data-value">
+                    {% if employee.attrition %}
+                    <span class="text-danger fw-bold"><i class="bi bi-shield-slash-fill"></i> TERMINATED / LEFT NODE</span>
+                    {% else %}
+                    <span class="text-success fw-bold"><i class="bi bi-shield-check"></i> ACTIVE / ONLINE</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

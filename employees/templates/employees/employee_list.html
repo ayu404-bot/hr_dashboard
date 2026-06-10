@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Directory Node</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #020304; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; padding: 60px 0; overflow-x: hidden; perspective: 1400px; }
+        .grid-overlay { position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background-image: linear-gradient(rgba(32, 201, 151, 0.02) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(32, 201, 151, 0.02) 1.5px, transparent 1px); background-size: 50px 50px; transform: rotateX(65deg) translateZ(-150px); transform-origin: center center; pointer-events: none; z-index: 0; animation: space-matrix-drift 30s infinite linear; }
+        @keyframes space-matrix-drift { 0% { transform: rotateX(65deg) translateZ(-150px) translateY(0px); } 100% { transform: rotateX(65deg) translateZ(-150px) translateY(50px); } }
+        .main-hud-wrapper { position: relative; z-index: 1; }
+        .directory-card { background: rgba(13, 17, 23, 0.65) !important; border: 2px solid rgba(32, 201, 151, 0.5) !important; border-radius: 20px !important; backdrop-filter: blur(15px); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(32, 201, 151, 0.15) !important; border-top-right-radius: 50px !important; transform: rotateX(4deg) rotateY(-1.5deg) translateZ(20px); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .directory-card:hover { transform: rotateX(0deg) rotateY(0deg) translateY(-5px) translateZ(40px); border-color: #20c997 !important; box-shadow: 0 50px 100px rgba(0, 0, 0, 0.95), 0 0 65px rgba(32, 201, 151, 0.3) !important; }
+        .table-tech { color: #ffffff; vertical-align: middle; border-collapse: separate; border-spacing: 0 6px; }
+        .table-tech th { color: #20c997; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; border-bottom: 2px solid rgba(32, 201, 151, 0.2); padding: 16px 14px; text-shadow: 0 0 6px rgba(32, 201, 151, 0.4); }
+        .table-tech td { background-color: rgba(22, 27, 34, 0.65) !important; border: 1px solid rgba(255, 255, 255, 0.03) !important; border-left: none !important; border-right: none !important; padding: 16px 14px; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
+        .table-tech tbody td:first-child { border-left: 2px solid transparent !important; border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+        .table-tech tbody td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+        .table-tech tbody tr:hover td { background-color: rgba(32, 201, 151, 0.12) !important; border-top: 1px solid rgba(32, 201, 151, 0.4) !important; border-bottom: 1px solid rgba(32, 201, 151, 0.4) !important; }
+        .table-tech tbody tr:hover td:first-child { border-left: 2px solid #20c997 !important; }
+        .email-telemetry-link { color: #00d2ff !important; text-shadow: 0 0 6px rgba(0, 210, 255, 0.4); text-dash-style: none; font-weight: 600; text-decoration: none; }
+        .status-badge { font-size: 10px; padding: 5px 12px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .btn-mod-node { color: #007bff !important; border: 1px solid rgba(0, 123, 255, 0.4) !important; background: rgba(0, 123, 255, 0.05); font-size: 11px; font-weight: 700; text-transform: uppercase; transition: all 0.2s; }
+        .btn-mod-node:hover { background: #007bff !important; color: #ffffff !important; box-shadow: 0 0 12px rgba(0, 123, 255, 0.5); }
+        .btn-wipe-node { color: #dc3545 !important; border: 1px solid rgba(220, 53, 69, 0.4) !important; background: rgba(220, 53, 69, 0.05); font-size: 11px; font-weight: 700; text-transform: uppercase; transition: all 0.2s; }
+        .btn-wipe-node:hover { background: #dc3545 !important; color: #ffffff !important; box-shadow: 0 0 12px rgba(220, 53, 69, 0.5); }
+        .btn-highlight-sync { background: linear-gradient(135deg, #20c997 0%, #0d6efd 100%) !important; border: 1px solid #ffffff !important; color: #ffffff !important; font-weight: 800 !important; font-size: 13px !important; display: inline-flex; align-items: center; box-shadow: 0 0 15px rgba(32, 201, 151, 0.6) !important; animation: neon-breathing-loop 2.5s infinite ease-in-out; transition: all 0.3s; text-decoration: none; }
+        @keyframes neon-breathing-loop { 0%, 100% { box-shadow: 0 0 12px rgba(32, 201, 151, 0.4); opacity: 0.95; } 50% { box-shadow: 0 0 22px rgba(32, 201, 151, 0.8); border-color: #23dba5 !important; opacity: 1; } }
+
+        /* Pop-up Alert Core Styles */
+        .cyber-toast-alert {
+            background: rgba(13, 24, 21, 0.85) !important; border: 1px solid #20c997 !important; border-left: 5px solid #20c997 !important;
+            border-radius: 8px !important; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(32, 201, 151, 0.2);
+            margin-bottom: 25px; padding: 16px 20px; animation: toast-slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes toast-slide-in { 0% { transform: translateY(-20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        .grid-flicker { animation: neon-icon-blink 2s infinite step-end; }
+        @keyframes neon-icon-blink { 0%, 100% { opacity: 1; text-shadow: 0 0 8px #20c997; } 50% { opacity: 0.8; text-shadow: none; } }
+    </style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+<div class="container main-hud-wrapper">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-dismissible fade show cyber-toast-alert" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-shield-check text-success fs-4 me-3 grid-flicker"></i>
+                    <div>
+                        <strong class="text-uppercase text-success font-monospace d-block" style="font-size: 11px; letter-spacing: 1px;">Mainframe Data Sync Verified</strong>
+                        <span class="small font-monospace text-white-50" style="font-size: 12px;">{{ message }}</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card directory-card p-4 shadow-lg">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+            <div class="d-flex align-items-center">
+                <a href="/dashboard/" class="btn btn-outline-secondary btn-sm me-3"><i class="bi bi-arrow-left"></i></a>
+                <div>
+                    <h4 class="fw-bold m-0 text-white text-uppercase tracking-wider"><i class="bi bi-people-fill text-success me-2"></i>Core Staff Registry</h4>
+                    <small class="text-muted small" style="font-family: monospace;">STATUS: ENCRYPTED HANDSHAKE_OK</small>
+                </div>
+            </div>
+            <a href="{% url 'add_employee' %}" class="btn btn-highlight-sync px-4 py-2 text-uppercase font-monospace">
+               <i class="bi bi-person-plus-fill me-2"></i> Sync New Record
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-tech table-hover m-0">
+                <thead>
+                    <tr><th>Agent Identifier</th><th>Email Routing Endpoint</th><th>Appointed Dept</th><th>Salary Scale Node</th><th>Performance Index</th><th>System Status</th><th class="text-center">Database Modification</th></tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees %}
+                    <tr>
+                        <td class="fw-bold">
+                            <a href="{% url 'employee_profile' emp.id %}" class="text-white text-decoration-none border-bottom border-secondary border-dashed pb-0">
+                                <i class="bi bi-file-person text-info me-1"></i> {{ emp.name }}
+                            </a>
+                        </td>
+                        <td><a href="mailto:{{ emp.email }}" class="email-telemetry-link">{{ emp.email }}</a></td>
+                        <td><span class="badge bg-dark border border-secondary text-info px-2 py-1.5">{{ emp.department }}</span></td>
+                        <td class="text-success fw-semibold">Rs.{{ emp.salary }}</td>
+                        <td class="text-warning fw-bold"><i class="bi bi-cpu me-1"></i> {{ emp.performance_score }}</td>
+                        <td>{% if emp.attrition %}<span class="status-badge bg-danger text-white">Left</span>{% else %}<span class="status-badge bg-success text-white">Active</span>{% endif %}</td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{% url 'update_employee' emp.id %}" class="btn btn-sm btn-mod-node px-2 py-1">
+                                    <i class="bi bi-pencil-square me-1"></i> MOD_NODE
+                                </a>
+                                <a href="{% url 'delete_employee' emp.pk %}" class="btn btn-sm btn-wipe-node px-2 py-1" onclick="return confirm('Purge record?');">
+                                    <i class="bi bi-trash3-fill me-1"></i> WIPE_NODE
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center text-muted py-5">No organizational variables initialized.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

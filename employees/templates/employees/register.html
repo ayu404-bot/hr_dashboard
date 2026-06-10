@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Analytics Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at top, #07101d 0%, #020304 45%, #020304 100%);
+            color: #e9edf5;
+            font-family: 'Inter', sans-serif;
+            display: grid;
+            place-items: center;
+            padding: 1.5rem;
+        }
+        .auth-shell {
+            width: min(100%, 980px);
+            background: rgba(7, 12, 23, 0.95);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+        }
+        .auth-sidebar {
+            background: linear-gradient(180deg, #06111c 0%, #08131f 100%);
+            padding: 3rem 2.5rem;
+            color: #cfd9ee;
+        }
+        .auth-sidebar h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        .auth-sidebar p {
+            color: #94a3b8;
+            line-height: 1.8;
+        }
+        .auth-form {
+            padding: 3rem 2.75rem;
+        }
+        .auth-form h2 {
+            font-size: 1.6rem;
+            color: #f8fbff;
+            margin-bottom: 0.5rem;
+        }
+        .auth-form p { color: #94a3b8; margin-bottom: 2rem; }
+        .form-control {
+            background: rgba(255,255,255,0.06) !important;
+            border: 1px solid rgba(255,255,255,0.12) !important;
+            color: #f8fbff !important;
+            border-radius: 14px;
+            padding: 0.95rem 1rem;
+        }
+        .form-control:focus {
+            border-color: #33c2a3 !important;
+            box-shadow: 0 0 0 4px rgba(51,194,163,0.12) !important;
+        }
+        .form-label { color: #e9edf5; }
+        .btn-auth {
+            width: 100%;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #33c2a3, #0d6efd);
+            border: none;
+            color: #fff;
+            padding: 0.95rem 1rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+        .password-toggle-btn {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            z-index: 2;
+        }
+        .auth-footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 1.25rem;
+            margin-top: 1.5rem;
+            color: #94a3b8;
+        }
+        .auth-footer a { color: #33c2a3; text-decoration: none; }
+        .form-scroll-wrapper {
+            max-height: 52vh;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+        .form-scroll-wrapper::-webkit-scrollbar { width: 5px; }
+        .form-scroll-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 999px; }
+        @media (max-width: 991px) {
+            .auth-shell { display: block; }
+            .auth-sidebar, .auth-form { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-shell row g-0 overflow-hidden">
+        <div class="col-md-5 auth-sidebar d-flex flex-column justify-content-center">
+            <div>
+                <h1>Register Entry</h1>
+                <p>Create your HR Analytics administrator account and gain access to secure management controls.</p>
+            </div>
+            <div class="mt-auto auth-footer">
+                <p>Already registered? <a href="{% url 'login' %}">Sign in instead</a></p>
+            </div>
+        </div>
+        <div class="col-md-7 auth-form">
+            <h2>Create Account</h2>
+            <p>Provide your username and password details to register in the matrix system.</p>
+            <form method="POST" class="form-scroll-wrapper">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-auth mt-3">Create Account</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInputs = document.querySelectorAll('input[type=password]');
+            passwordInputs.forEach(function(passwordInput) {
+                const wrapper = passwordInput.parentElement;
+                if (!wrapper) return;
+                const toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.className = 'password-toggle-btn';
+                toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+                wrapper.style.position = 'relative';
+                wrapper.appendChild(toggleBtn);
+                toggleBtn.addEventListener('click', function() {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        toggleBtn.innerHTML = '<i class="bi bi-eye"></i>';
+                    } else {
+                        passwordInput.type = 'password';
+                        toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

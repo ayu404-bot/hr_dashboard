@@ -1,0 +1,319 @@
+{% extends 'employees/base.html' %}
+
+
+{% block title %}System Core Gateway{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ==========================================================
+       CINEMATIC 3D GRID & GEOMETRY SPACE CONTROLLER
+       ========================================================== */
+    body { 
+        perspective: 1600px; 
+        transform-style: preserve-3d;
+    }
+
+    /* --- RADICAL HIGH-ATTRACTION SIDEBAR LOGO 3D SPIN INJECTION --- */
+    .sidebar .brand-panel .rounded-circle i,
+    .bi-grid-3x3-gap-fill {
+        display: inline-block !important;
+        transform-style: preserve-3d !important;
+        animation: logo-3d-spin-deck 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    @keyframes logo-3d-spin-deck {
+        0% { transform: rotateY(0deg) scale(1); filter: drop-shadow(0 0 4px var(--accent)); }
+        50% { transform: rotateY(180deg) scale(1.15); filter: drop-shadow(0 0 22px var(--accent-strong)) drop-shadow(0 0 35px var(--accent)); }
+        100% { transform: rotateY(360deg) scale(1); filter: drop-shadow(0 0 4px var(--accent)); }
+    }
+
+    /* THEME ADAPTIVE TEXT ENGINES */
+    .theme-adaptive-header {
+        color: var(--text) !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+    }
+    .theme-adaptive-para {
+        color: var(--text-muted) !important;
+        line-height: 1.8 !important;
+        font-size: 14.5px !important;
+        transition: color 0.3s ease;
+    }
+
+    [data-theme="light"] .theme-adaptive-header { color: #0f172a !important; text-shadow: none !important; }
+    [data-theme="light"] .theme-adaptive-para { color: #334155 !important; }
+    [data-theme="light"] .cyber-status-text { color: #1e293b !important; }
+
+    /* ==========================================================
+       CYBER TERMINAL HOVER CARDS WITH LIVE INTERACTIVE SCANNING
+       ========================================================== */
+    .hud-card {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 24px !important;
+        padding: 35px;
+        position: relative;
+        overflow: hidden;
+        transform: rotateX(2deg) rotateY(-0.5deg) translateZ(10px);
+        transform-style: preserve-3d;
+        box-shadow: var(--shadow);
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+    }
+    .hud-card:hover {
+        transform: rotateX(0deg) rotateY(0deg) translateY(-6px) translateZ(30px);
+        border-color: var(--accent) !important;
+        box-shadow: 0 30px 70px rgba(51, 194, 163, 0.18);
+    }
+
+    /* DIGITAL MATRIX LASER SCANNING BAR EFFECT */
+    .hud-card::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        opacity: 0.3;
+        animation: cyber-laser-scan 4s infinite linear;
+    }
+    @keyframes cyber-laser-scan {
+        0% { top: 0%; }
+        50% { top: 100%; }
+        100% { top: 0%; }
+    }
+
+    /* LIVE METRIC DECK SUB-NODES */
+    .telemetry-node-box {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        transition: all 0.3s ease;
+    }
+    .telemetry-node-box:hover {
+        background: rgba(51, 194, 163, 0.04);
+        border-color: var(--accent);
+        transform: translateZ(10px);
+    }
+    [data-theme="light"] .telemetry-node-box { background: rgba(15, 23, 42, 0.02); }
+
+    /* ==========================================================
+       NEON BUTTON MATRIX CORE BLOCKS
+       ========================================================== */
+    .btn-neon-pulse {
+        background: linear-gradient(135deg, var(--accent-strong) 0%, var(--accent) 100%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        box-shadow: 0 0 15px rgba(51, 194, 163, 0.3) !important;
+        letter-spacing: 1.5px;
+        transition: all 0.3s ease;
+        animation: neon-pulse-glow 2s infinite alternate ease-in-out;
+    }
+    .btn-neon-pulse:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 0 30px var(--accent) !important;
+        color: #ffffff !important;
+    }
+    @keyframes neon-pulse-glow {
+        0% { box-shadow: 0 0 12px rgba(51, 194, 163, 0.3), inset 0 0px rgba(255,255,255,0); }
+        100% { box-shadow: 0 0 26px var(--accent), inset 0 0 10px rgba(255,255,255,0.2); }
+    }
+
+    /* CORE REVIEWS CAROUSEL MODULE SLIDES */
+    .review-node-slide {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+    }
+    .operator-profile {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 15px;
+    }
+    .operator-badge-avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: rgba(51, 194, 163, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 1.4rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .carousel-control-btn {
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text-muted) !important;
+        font-family: monospace;
+        font-size: 10px;
+        transition: all 0.2s ease;
+    }
+    .carousel-control-btn:hover {
+        background: rgba(51, 194, 163, 0.12) !important;
+        color: var(--accent) !important;
+        border-color: var(--accent) !important;
+    }
+
+    /* COCKPIT SPINNING RADAR CONSOLE */
+    .spinning-radar-glow {
+        display: inline-block;
+        animation: radar-spin-loop 4s infinite linear;
+    }
+    @keyframes radar-spin-loop {
+        100% { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block page_title %}Matrix System Core{% endblock %}
+{% block page_description %}Secure structural workspace nodes and dynamic real-time data terminal mapping.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-1">
+    <div class="row g-4">
+        <div class="col-xl-8 col-lg-7 d-flex flex-column gap-4">
+            
+            <div class="card hud-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <h4 class="text-uppercase mb-3 theme-adaptive-header d-flex align-items-center gap-2" style="font-size: 19px;">
+                        <i class="bi bi-terminal-fill text-shadow-glow" style="color: var(--accent);"></i> 
+                        {% if user.is_superuser or user.is_staff %}
+                            Admin Control Node Active
+                        {% else %}
+                            Personnel Terminal Established
+                        {% endif %}
+                    </h4>
+                    
+                    <p class="theme-adaptive-para mb-4">
+                        Welcome back, <strong style="color: var(--accent);">{{ user.username }}</strong>. 
+                        {% if user.is_superuser or user.is_staff %}
+                            Your administrative clearance grants you complete access to structural employee clustering synchronization models, performance analytics data streaming pipelines, and matrix spreadsheet layers.
+                        {% else %}
+                            Your secure node identity is synchronized. You can safely review workspace directory insights, active tasks, and team telemetry charts authorized under your identity node.
+                        {% endif %}
+                    </p>
+                    
+                    <div class="p-3 rounded font-monospace my-4" style="background: rgba(51, 194, 163, 0.05); border: 1px dashed var(--accent); font-size: 12px; color: var(--accent);">
+                        <span class="d-inline-block spinning-radar-glow me-1"><i class="bi bi-patch-check-fill"></i></span> 
+                        &gt;&gt; SECURE_LOG: Identity verified for [{{ user.email }}]. Clearance Level: {% if user.is_superuser %}ROOT_ROOT{% elif user.is_staff %}STAFF_NODE{% else %}EMPLOYEE_NODE{% endif %}. Handshake stable.
+                    </div>
+                </div>
+                
+                <div>
+                    <a href="{% url 'dashboard' %}" class="btn btn-neon-pulse font-monospace text-uppercase fw-bold px-4 py-3 w-100 text-center" style="font-size: 12px; letter-spacing: 2px; border-radius: 14px;">
+                        <i class="bi bi-cursor-fill me-2"></i> Launch Main Analytics Matrix
+                    </a>
+                </div>
+            </div>
+
+            <div class="review-carousel-wrapper">
+                <div class="card hud-card">
+                    <h5 class="fw-bold text-uppercase tracking-wider mb-4 font-monospace d-flex align-items-center gap-2" style="font-size: 13px; color: var(--accent) !important;">
+                        <i class="bi bi-shield-shaded"></i> Operator Assessment Ledger
+                    </h5>
+                    
+                    <div id="operatorReviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+                        <div class="carousel-inner">
+                            
+                            <div class="carousel-item active">
+                                <div class="review-node-slide">
+                                    <div class="operator-profile">
+                                        <div class="operator-badge-avatar"><i class="bi bi-person-badge-fill"></i></div>
+                                        <div>
+                                            <h6 class="m-0 fw-bold font-monospace theme-adaptive-text" style="font-size: 13px;">Agent_Kaelen // HR_Lead</h6>
+                                            <div class="rating-row mt-1">
+                                                <i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> 
+                                                <span class="theme-adaptive-muted font-monospace ms-2" style="font-size: 9px; opacity:0.75;">[INTEGRITY_OK]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="m-0 font-monospace theme-adaptive-muted" style="font-size: 12px; line-height: 1.7;">
+                                        "The 3D biometric input pipeline functions with stunning speed. Committing structural personnel parameters into SQLite used to cause heavy handshakes, but this clean UI is phenomenal."
+                                   </p>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="review-node-slide">
+                                    <div class="operator-profile">
+                                        <div class="operator-badge-avatar"><i class="bi bi-person-gear"></i></div>
+                                        <div>
+                                            <h6 class="m-0 fw-bold font-monospace theme-adaptive-text" style="font-size: 13px;">Sys_Admin_Linus // Root_Node</h6>
+                                            <div class="rating-row mt-1">
+                                                <i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> 
+                                                <span class="theme-adaptive-muted font-monospace ms-2" style="font-size: 9px; opacity:0.75;">[HANDSHAKE_PERFECT]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="m-0 font-monospace theme-adaptive-muted" style="font-size: 12px; line-height: 1.7;">
+                                        "The spreadsheet data pipeline compile layer maps Excel logs in milliseconds. Moving from dark mode to the new clean light lab theme provides amazing interface flexibility."
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button class="btn btn-sm carousel-control-btn py-1 px-3 rounded-3" type="button" data-bs-target="#operatorReviewsCarousel" data-bs-slide="prev">&lt; PREV</button>
+                            <button class="btn btn-sm carousel-control-btn py-1 px-3 rounded-3" type="button" data-bs-target="#operatorReviewsCarousel" data-bs-slide="next">NEXT &gt;</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5 d-flex flex-column gap-3">
+            <div class="card hud-card h-100 d-flex flex-column justify-content-between gap-3">
+                <div class="border-bottom border-secondary border-opacity-10 pb-2">
+                    <h6 class="font-monospace text-uppercase text-info tracking-wider m-0" style="font-size: 12px;">
+                        <i class="bi bi-hdd-network-fill me-1"></i> Telemetry Sync Stream
+                    </h6>
+                </div>
+
+                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">System Status</small>
+                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">MAINFRAME_ONLINE</span>
+                    </div>
+                    <span class="badge bg-success bg-opacity-25 text-success font-monospace" style="font-size: 9px;">SECURE</span>
+                </div>
+
+                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Active Identity Node</small>
+                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">@{{ user.username }}</span>
+                    </div>
+                    <span class="badge bg-info bg-opacity-25 text-info font-monospace" style="font-size: 9px;">AUTHENTICATED</span>
+                </div>
+
+                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Access Clearance</small>
+                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">
+                            {% if user.is_superuser %}
+                                ROOT_ADMIN
+                            {% elif user.is_staff %}
+                                HR_STAFF
+                            {% else %}
+                                STANDARD_EE
+                            {% endif %}
+                        </span>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-25 text-warning font-monospace" style="font-size: 9px;">AUTHORIZED</span>
+                </div>
+
+                <div class="pt-2 border-top border-secondary border-opacity-10 text-center font-monospace" style="font-size: 10px;">
+                    <span class="theme-adaptive-muted"><i class="bi bi-clock-history me-1"></i> Diagnostic Node Session: Active</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
