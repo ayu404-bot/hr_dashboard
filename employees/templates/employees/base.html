@@ -375,12 +375,22 @@
                 </div>
             </div>
 
-            <nav class="nav-links">
-                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="bi bi-house-door-fill"></i> Home</a>
-                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                <a href="{% url 'employee_list' %}" class="{% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}"><i class="bi bi-people-fill"></i> Employees</a>
-                <a href="{% url 'recycle_bin' %}" class="{% if request.resolver_match.url_name == 'recycle_bin' %}active{% endif %}"><i class="bi bi-trash3 me-2"></i> Recycle Bin</a>
-                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}"><i class="bi bi-info-circle"></i> About</a>
+            <nav class="nav-links d-flex flex-column" style="gap: 12px; padding: 10px; z-index: 9999; position: relative;">
+                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
+                    <i class="bi bi-house-door-fill me-3"></i> Home
+                </a>
+                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
+                    <i class="bi bi-speedometer2 me-3"></i> Dashboard
+                </a>
+                <a href="{% url 'employee_list' %}" class="{% if request.resolver_match.url_name == 'employee_list' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
+                    <i class="bi bi-people-fill me-3"></i> Employees
+                </a>
+                <a href="{% url 'recycle_bin' %}" class="{% if request.resolver_match.url_name == 'recycle_bin' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
+                    <i class="bi bi-trash-fill me-3"></i> Recycle Bin
+                </a>
+                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
+                    <i class="bi bi-info-circle-fill me-3"></i> About
+                </a>
             </nav>
 
             <button class="theme-toggle" type="button" onclick="toggleSystemTheme()">
