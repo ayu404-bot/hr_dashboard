@@ -6,52 +6,36 @@
 {% block page_description %}<span class="theme-adaptive-text">[status: streaming live telemetry sync logs]</span>{% endblock %}
 
 {% block header_actions %}
-<div class="d-flex gap-3 align-items-center" style="position: relative; z-index: 999999 !important; background: transparent;">
+<div class="d-flex flex-wrap gap-2 align-items-center mt-2 mt-md-0" style="position: relative; z-index: 1020 !important; background: transparent;">
     
-    <a href="/help/" class="btn" style="
+    <a href="{% url 'help' %}" class="btn d-inline-flex align-items-center gap-2 text-transform-uppercase text-decoration-none transition-transform" style="
         background: #70570c !important;
-        color: #070c14 !important;
+        color: #e9edf5 !important;
         font-family: monospace !important;
-        font-size: 12px !important;
+        font-size: 11px !important;
         font-weight: 800 !important;
-        letter-spacing: 1px !important;
-        padding: 10px 20px !important;
+        letter-spacing: 0.5px !important;
+        padding: 8px 14px !important;
         border-radius: 10px !important;
         border: 2px solid #ffc107 !important;
-        box-shadow: 0 0 20px #ffc107, 0 0 40px rgba(255, 193, 7, 0.4) !important;
-        display: inline-flex !important;
-        align-items: center;
-        gap: 8px;
-        text-transform: uppercase !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        text-decoration: none !important;
-        transition: transform 0.2s ease !important;
-    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-        <i class="bi bi-question-circle-fill" style="color: #070c14 !important; font-size: 14px;"></i> HELP / सहायता
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4) !important;
+    " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="bi bi-question-circle-fill" style="font-size: 13px;"></i> HELP / सहायता
     </a>
 
-    <a href="/export-excel/" class="btn" style="
+    <a href="{% url 'export_excel' %}" class="btn d-inline-flex align-items-center gap-2 text-transform-uppercase text-decoration-none transition-transform" style="
         background: #0d6653 !important;
-        color: #070c14 !important;
+        color: #e9edf5 !important;
         font-family: monospace !important;
-        font-size: 12px !important;
+        font-size: 11px !important;
         font-weight: 800 !important;
-        letter-spacing: 1px !important;
-        padding: 10px 20px !important;
+        letter-spacing: 0.5px !important;
+        padding: 8px 14px !important;
         border-radius: 10px !important;
         border: 2px solid #33c2a3 !important;
-        box-shadow: 0 0 20px #33c2a3, 0 0 40px rgba(51, 194, 163, 0.4) !important;
-        display: inline-flex !important;
-        align-items: center;
-        gap: 8px;
-        text-transform: uppercase !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        text-decoration: none !important;
-        transition: transform 0.2s ease !important;
-    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-        <i class="bi bi-file-earmark-spreadsheet" style="color: #070c14 !important; font-size: 14px;"></i> Export Excel
+        box-shadow: 0 0 15px rgba(51, 194, 163, 0.4) !important;
+    " onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="bi bi-file-earmark-spreadsheet" style="font-size: 13px;"></i> Export Excel
     </a>
 
 </div>
@@ -71,7 +55,7 @@
             <h2 class="fw-bold m-0 mt-1 font-monospace theme-adaptive-text">{{ active|default:0 }}</h2>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-lg-4">
+    <div class="col-12 col-sm-12 col-lg-4">
         <div class="card stat-card p-3 border-start border-danger border-4">
             <small class="text-uppercase tracking-wide font-monospace theme-adaptive-muted" style="font-size: 10px;">Attrition Loss</small>
             <h2 class="fw-bold m-0 mt-1 font-monospace theme-adaptive-text">{{ left|default:0 }}</h2>
@@ -79,35 +63,35 @@
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <div class="col-sm-6 col-xl-3">
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
         <div class="card telemetry-card h-100">
-            <h6 class="text-info mb-3"><i class="bi bi-diagram-3-fill me-1"></i> Appointed Dept</h6>
+            <h6 class="text-info mb-3" style="font-size: 13px;"><i class="bi bi-diagram-3-fill me-1"></i> Appointed Dept</h6>
             <div class="canvas-container" style="position: relative; height: 160px;"><canvas id="deptDoughnutChart"></canvas></div>
         </div>
     </div>
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-3">
         <div class="card telemetry-card h-100">
-            <h6 class="text-success mb-3"><i class="bi bi-currency-rupee me-1"></i> Salary Scale Node</h6>
+            <h6 class="text-success mb-3" style="font-size: 13px;"><i class="bi bi-currency-rupee me-1"></i> Salary Scale Node</h6>
             <div class="canvas-container" style="position: relative; height: 160px;"><canvas id="salaryAreaChart"></canvas></div>
         </div>
     </div>
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-3">
         <div class="card telemetry-card h-100">
-            <h6 class="text-warning mb-3"><i class="bi bi-shield-shaded me-1"></i> Performance Index</h6>
+            <h6 class="text-warning mb-3" style="font-size: 13px;"><i class="bi bi-shield-shaded me-1"></i> Performance Index</h6>
             <div class="canvas-container" style="position: relative; height: 160px;"><canvas id="performanceRadarChart"></canvas></div>
         </div>
     </div>
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-3">
         <div class="card telemetry-card h-100">
-            <h6 class="text-danger mb-3"><i class="bi bi-cpu-fill me-1"></i> System Status</h6>
+            <h6 class="text-danger mb-3" style="font-size: 13px;"><i class="bi bi-cpu-fill me-1"></i> System Status</h6>
             <div class="canvas-container" style="position: relative; height: 160px;"><canvas id="statusHorizontalBarChart"></canvas></div>
         </div>
     </div>
 </div>
 
 <div class="row g-4 justify-content-center align-items-stretch mb-2">
-    <div class="col-xl-7 col-lg-6">
+    <div class="col-12 col-xl-7 col-lg-6">
         <div class="instructor-panel shadow-lg h-100">
             <div class="hud-stage">
                 <div class="anime-teacher-vector">
@@ -129,25 +113,25 @@
 
             <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 font-monospace">
                 <div class="row g-2">
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-primary" style="font-size: 11px;">PHASE 1: NODE_MIGRATION</strong>
                             <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Initial system setup executing raw recruitment data indexing, mapping, and connection routing initialization.</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-success" style="font-size: 11px;">PHASE 2: TELEMETRY_RENDER</strong>
                             <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Compiling real-time calculations to build metrics logs, analytics charts, and telemetry status rows.</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-warning" style="font-size: 11px;">PHASE 3: STATE_SYNCHRONIZATION</strong>
                             <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Global alignment matching active localStorage state layers to adjust stylesheets across views cleanly.</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-danger" style="font-size: 11px;">PHASE 4: LIVE_DEPLOYMENT</strong>
                             <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Mainframe environment online, dynamically tracking operational records and processing telemetry cycles.</p>
@@ -158,12 +142,11 @@
         </div>
     </div>
     
-    <div class="col-xl-5 col-lg-6 col-md-12">
-        <div class="ai-avatar-box shadow-lg h-100 d-flex flex-column justify-content-center">
+    <div class="col-12 col-xl-5 col-lg-6">
+        <div class="ai-avatar-box shadow-lg h-100 d-flex flex-column justify-content-center py-4">
             <div class="text-info small font-monospace mb-3 border-bottom border-secondary pb-2">
                 <i class="bi bi-headset me-1"></i> Mainframe Operator AI
             </div>
-            <!-- PLACED EMBEDDED 3D HEADPHONE ELEMENT NODES INSIDE THE FIXED GRID AREA -->
             <div class="anime-character-hud" style="overflow: visible !important;">
                 <div class="headphone-3d-wrapper">
                     <div class="hp-headband"></div>
@@ -216,29 +199,23 @@
             if(statusChartInstance) statusChartInstance.destroy();
             if(masterChartInstance) masterChartInstance.destroy();
 
-            // 1. Appointed Department Chart (Dynamically linked to your live employee data)
+            // 1. Appointed Department Chart
             deptChartInstance = new Chart(document.getElementById('deptDoughnutChart'), { type: 'doughnut', data: { labels: ['HR Node', 'Tech Node', 'Sales Node', 'Admin Node'], datasets: [{ data: [activeNodes * 2, totalHeadcount * 3, 5, 2], backgroundColor: ['#0d6efd', '#33c2a3', '#ffc107', '#6c757d'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 9 }, color: chartTextColor } } } } });
             
             // 2. Salary Scale Metrics Area Chart
-            salaryChartInstance = new Chart(document.getElementById('salaryAreaChart'), { type: 'line', data: { labels: ['Min Scale', 'Avg Scale', 'Current Cap', 'Max Cap'], datasets: [{ label: 'Scale (₹)', data: [25000, 35000 + (totalHeadcount * 2000), 50000 + (activeNodes * 4000), 95000], borderColor: '#33c2a3', backgroundColor: currentActiveTheme === 'light' ? 'rgba(51, 194, 163, 0.2)' : 'rgba(51, 194, 163, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: chartTextColor } }, y: { grid: { color: gridLinesColor }, ticks: { color: chartTextColor } } } } });
+            salaryChartInstance = new Chart(document.getElementById('salaryAreaChart'), { type: 'line', data: { labels: ['Min', 'Avg', 'Current', 'Max'], datasets: [{ label: 'Scale (₹)', data: [25000, 35000 + (totalHeadcount * 2000), 50000 + (activeNodes * 4000), 95000], borderColor: '#33c2a3', backgroundColor: currentActiveTheme === 'light' ? 'rgba(51, 194, 163, 0.2)' : 'rgba(51, 194, 163, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: chartTextColor } }, y: { grid: { color: gridLinesColor }, ticks: { color: chartTextColor } } } } });
             
             // 3. Operational Performance Radar Chart
-            performanceChartInstance = new Chart(document.getElementById('performanceRadarChart'), { type: 'radar', data: { labels: ['Output', 'Sync Speed', 'Resource Max', 'System Uptime', 'Logic Grid'], datasets: [{ label: 'Operational Metrics', data: [75 + activeNodes, 80 + totalHeadcount, 70, 95, 85], borderColor: '#ffc107', backgroundColor: 'rgba(255, 193, 7, 0.15)', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: r => { return { grid: { color: radialGridColor }, angleLines: { color: radialGridColor }, ticks: { display: false }, pointLabels: { font: { size: 8, weight: 'bold' }, color: chartTextColor } }; } } });
+            performanceChartInstance = new Chart(document.getElementById('performanceRadarChart'), { type: 'radar', data: { labels: ['Output', 'Speed', 'Resource', 'Uptime', 'Logic'], datasets: [{ label: 'Operational Metrics', data: [75 + activeNodes, 80 + totalHeadcount, 70, 95, 85], borderColor: '#ffc107', backgroundColor: 'rgba(255, 193, 7, 0.15)', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: radialGridColor }, angleLines: { color: radialGridColor }, ticks: { display: false }, pointLabels: { font: { size: 8, weight: 'bold' }, color: chartTextColor } } } } });
             
-            // 4. System Nodes Status Bar Chart (LIVE DATA STREAM FIXED UP HERE)
-            statusChartInstance = new Chart(document.getElementById('statusHorizontalBarChart'), { type: 'bar', data: { labels: ['Active Nodes', 'Wiped Nodes'], datasets: [{ data: [activeNodes, attritionLoss], backgroundColor: ['#1ca88f', '#ff6b78'], borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, beginAtZero: true, ticks: { precision: 0, color: chartTextColor } }, y: { grid: { display: false }, ticks: { color: chartTextColor } } } } });
+            // 4. System Nodes Status Bar Chart
+            statusChartInstance = new Chart(document.getElementById('statusHorizontalBarChart'), { type: 'bar', data: { labels: ['Active', 'Wiped'], datasets: [{ data: [activeNodes, attritionLoss], backgroundColor: ['#1ca88f', '#ff6b78'], borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, beginAtZero: true, ticks: { precision: 0, color: chartTextColor } }, y: { grid: { display: false }, ticks: { color: chartTextColor } } } } });
 
             // 5. Total Analysis Master List Chart
             masterChartInstance = new Chart(document.getElementById('mainframeMasterListChart'), { type: 'line', data: { labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'], datasets: [{ label: 'Mainframe Load', data: [30, 50, 45, 70 + activeNodes], borderColor: '#0d6efd', backgroundColor: currentActiveTheme === 'light' ? 'rgba(13, 110, 253, 0.2)' : 'rgba(13, 110, 253, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: chartTextColor } }, y: { grid: { color: gridLinesColor }, ticks: { color: chartTextColor } } } } });
         }
 
         buildSystemDynamicCharts();
-
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'matrix-system-theme') {
-                buildSystemDynamicCharts();
-            }
-        });
 
         let trackingStateCache = document.documentElement.getAttribute('data-theme');
         setInterval(() => {
@@ -308,8 +285,18 @@
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
     }
     .instructor-panel:hover { transform: rotateX(0deg) rotateY(0deg) translateY(-3px) translateZ(25px); box-shadow: var(--shadow); }
-    .hud-stage { display: flex; align-items: center; justify-content: space-around; padding-top: 15px; flex-wrap: wrap; gap: 20px; transform-style: preserve-3d; }
-    .master-chart-box { flex-grow: 1; height: 220px; min-width: 280px; position: relative; transform: translateZ(15px); }
+    
+    /* MODIFIED HUD STAGE TO FLEX AND COPE RESPONSIVELY UNDER PHONES */
+    .hud-stage { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-around; 
+        padding-top: 15px; 
+        flex-wrap: wrap; 
+        gap: 20px; 
+        transform-style: preserve-3d; 
+    }
+    .master-chart-box { flex-grow: 1; height: 220px; position: relative; transform: translateZ(15px); width: 100%; }
 
     /* Explanation Boxes Inside Theme */
     .phase-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); transition: transform 0.2s ease; }
@@ -416,9 +403,7 @@
     .ai-avatar-box { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 18px; padding: 22px; transform: translateZ(5px); }
     .anime-character-hud { position: relative; width: 100px; height: 100px; margin: 0 auto; background: rgba(51, 194, 163, 0.05); border-radius: 50%; border: 1px solid var(--border); }
 
-    /* ==========================================================
-       DYNAMIC 3D HEADPHONE VECTOR LOGO INITIALIZATION ENGINE
-       ========================================================== */
+    /* DYNAMIC 3D HEADPHONE VECTOR LOGO ENGINE */
     .headphone-3d-wrapper {
         position: absolute;
         top: 50%;
@@ -486,6 +471,12 @@
     @keyframes neon-ring-pulse {
         0%, 100% { opacity: 0.6; box-shadow: 0 0 4px #ff6b78; }
         50% { opacity: 1; box-shadow: 0 0 12px #ff6b78; }
+    }
+    
+    /* ADDITIONAL MEDIA QUERIES FOR COMPACT WIDTH HANDLES */
+    @media (max-width: 767.98px) {
+        .hud-stage { flex-direction: column-reverse !important; align-items: center !important; }
+        .master-chart-box { height: 180px !important; }
     }
 </style>
 {% endblock %}

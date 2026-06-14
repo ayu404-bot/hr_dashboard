@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}Central Matrix Directory{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -53,7 +53,7 @@
             z-index: 0;
         }
         
-        /* Modifying shell to handle full-screen login layout */
+        /* DESKTOP PAGE STRUCTURE GRID LAYOUT */
         .page-shell {
             min-height: 100vh;
             display: grid;
@@ -71,6 +71,21 @@
             position: relative;
             z-index: 1;
             padding: 20px;
+        }
+
+        /* MOBILE HEADER CONTAINER MOUNT UI */
+        .mobile-top-bar {
+            display: none;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 20px;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1040;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
 
         .sidebar {
@@ -139,10 +154,12 @@
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .sidebar-footer a { color: var(--danger) !important; font-weight: 700; }
+        
         .main-content {
             padding: 34px 36px;
             position: relative;
             overflow: hidden;
+            z-index: 2;
         }
         .page-header {
             display: flex;
@@ -290,15 +307,91 @@
         .status-active { background: rgba(51, 194, 163, 0.16); color: #d3fff0; }
         .status-left { background: rgba(255, 107, 120, 0.16); color: #ffd8de; }
         .form-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; margin-top: 24px; }
-        @media (max-width: 1199px) {
-            .page-shell { grid-template-columns: 1fr; }
-            .sidebar { min-height: auto; width: 100%; }
-            .main-content { padding: 24px 20px; }
+
+        /* 3D LOGO SPINNING LIFECYCLE ENGINE */
+        .sidebar .rounded-circle i,
+        .mobile-top-bar i.bi-grid-3x3-gap-fill {
+            display: inline-block !important;
+            transform-style: preserve-3d !important;
+            animation: logo-3d-spin-deck 5s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
-        @media (max-width: 767px) {
-            .sidebar { display: none; }
-            .page-header { align-items: flex-start; }
-            .page-title { font-size: 1.75rem; }
+        @keyframes logo-3d-spin-deck {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); filter: drop-shadow(0 0 15px var(--accent)); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* CLEARING CLICK INTERCEPT OVERLAYS */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999 !important; /* Low layout priority index */
+            pointer-events: none; /* Deactivates blocking state clicks */
+        }
+        .sidebar-overlay.active { display: block; pointer-events: auto; }
+
+        /* ==========================================================
+           DYNAMIC RESPONSIVITY ENGINE (FIXED CLICK PRIORITY BLOCKS)
+           ========================================================== */
+       /* ==========================================================
+           BULLETPROOF MOBILE GESTURE AND LAYER ISOLATION OVERRIDES
+           ========================================================== */
+        @media (max-width: 991.98px) {
+            .page-shell { 
+                display: block !important; 
+                grid-template-columns: none !important; 
+                position: static !important;
+            }
+            
+            .mobile-top-bar { display: flex !important; }
+            
+            /* FORCE SIDEBAR TO STAND AT THE ABSOLUTE TOP OF THE VIEW STACK */
+            .sidebar { 
+                position: fixed !important;
+                top: 0; 
+                left: 0;
+                width: 280px !important;
+                height: 100vh !important;
+                min-height: 100vh !important;
+                background: linear-gradient(180deg, #070c14 0%, #0d121d 100%) !important;
+                box-shadow: none !important;
+                
+                /* Keep completely hidden from screen rendering flow when closed */
+                z-index: 999999 !important; 
+                transform: translateX(-100%) !important;
+                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                display: none !important;
+            }
+            
+            /* Force reveal and block any background element interactions when open */
+            .sidebar.mobile-open {
+                display: flex !important;
+                transform: translateX(0) !important;
+                box-shadow: 25px 0 70px rgba(0, 0, 0, 0.85) !important;
+            }
+
+            /* ⚡ FORCE ACTIVATE LINKS TO PREVENT ANY FOCUS STEALING LAYER CLASHES */
+            .sidebar.mobile-open .nav-links,
+            .sidebar.mobile-open .nav-links a {
+                position: relative !important;
+                z-index: 2000005 !important;
+                pointer-events: auto !important;
+                cursor: pointer !important;
+            }
+            
+            .main-content { 
+                padding: 24px 16px !important; 
+                z-index: 1 !important; 
+                width: 100% !important;
+                position: relative !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .page-title { font-size: 1.6rem !important; }
+            .matrix-auth-card { padding: 25px 20px !important; }
         }
 
         /* ==========================================================
@@ -360,9 +453,21 @@
 
 <div class="grid-overlay"></div>
 
+<div class="mobile-top-bar">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-grid-3x3-gap-fill" style="color: var(--accent); font-size: 1.2rem;"></i>
+        <span class="fw-bold font-monospace tracking-wider" style="font-size: 14px; color: var(--text);">MatrixHR</span>
+    </div>
+    <button class="btn border-0 p-1" type="button" onclick="toggleMobileSidebarMenu()" style="color: var(--text); font-size: 1.6rem;">
+        <i class="bi bi-list"></i>
+    </button>
+</div>
+
+<div class="sidebar-overlay" id="mobileSidebarDimOverlay" onclick="toggleMobileSidebarMenu()"></div>
+
 {% if user.is_authenticated %}
     <div class="page-shell">
-        <aside class="sidebar">
+        <aside class="sidebar" id="mainSidebarNavigationWrapper">
             <div class="brand-panel">
                 <div class="d-flex align-items-center justify-content-start" style="gap: 12px;">
                     <div class="rounded-circle" style="width: 44px; height: 44px; background: rgba(51, 194, 163, 0.14); display: grid; place-items: center;">
@@ -375,21 +480,21 @@
                 </div>
             </div>
 
-            <nav class="nav-links d-flex flex-column" style="gap: 12px; padding: 10px; z-index: 9999; position: relative;">
-                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
-                    <i class="bi bi-house-door-fill me-3"></i> Home
+            <nav class="nav-links d-flex flex-column" style="gap: 6px; position: relative;">
+                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <i class="bi bi-house-door-fill"></i> Home
                 </a>
-                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
-                    <i class="bi bi-speedometer2 me-3"></i> Dashboard
+                <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-                <a href="{% url 'employee_list' %}" class="{% if request.resolver_match.url_name == 'employee_list' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
-                    <i class="bi bi-people-fill me-3"></i> Employees
+                <a href="{% url 'employee_list' %}" class="{% if request.resolver_match.url_name == 'employee_list' %}active{% endif %}">
+                    <i class="bi bi-people-fill"></i> Employees
                 </a>
-                <a href="{% url 'recycle_bin' %}" class="{% if request.resolver_match.url_name == 'recycle_bin' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
-                    <i class="bi bi-trash-fill me-3"></i> Recycle Bin
+                <a href="{% url 'recycle_bin' %}" class="{% if request.resolver_match.url_name == 'recycle_bin' %}active{% endif %}">
+                    <i class="bi bi-trash-fill"></i> Recycle Bin
                 </a>
-                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %} p-3 d-flex align-items-center" style="text-decoration: none;">
-                    <i class="bi bi-info-circle-fill me-3"></i> About
+                <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                    <i class="bi bi-info-circle-fill"></i> About
                 </a>
             </nav>
 
@@ -399,7 +504,7 @@
             </button>
 
             <div class="sidebar-footer">
-                <a href="{% url 'logout' %}" class="nav-flex align-items-center gap-2" style="text-decoration: none;">
+                <a href="{% url 'logout' %}" class="d-flex align-items-center gap-2" style="text-decoration: none;">
                     <i class="bi bi-box-arrow-right"></i> Logout</a>
             </div>
         </aside>
@@ -444,7 +549,9 @@
                         <label class="form-label">Security Access Key</label>
                         <input type="password" name="password" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary-accent w-100 mb-3">Initialize Portal Connection</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary-accent w-100 mb-3">Initialize Portal Connection</button>
+                    </div>
                 </form>
                 <div class="text-center mt-3">
                     <span class="text-muted small">New personnel? <a class="auth-toggle-link" id="switchToRegister">Request System Node</a></span>
@@ -466,7 +573,9 @@
                         <label class="form-label">Establish Password</label>
                         <input type="password" name="password" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-primary-accent w-100 mb-3">Deploy Account Credentials</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary-accent w-100 mb-3">Deploy Account Credentials</button>
+                    </div>
                 </form>
                 <div class="text-center mt-3">
                     <span class="text-muted small">Already recognized? <a class="auth-toggle-link" id="switchToLogin">Access Node Key</a></span>
@@ -475,7 +584,7 @@
 
             <div class="text-center mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
                 <button class="theme-toggle w-100 justify-content-center" type="button" onclick="toggleSystemTheme()">
-                    <i class="bi bi-sun-fill"></i>
+                    <i class="bi bi-moon-stars-fill"></i>
                     <span id="themeToggleLabelTextGate">Switch Theme</span>
                 </button>
             </div>
@@ -488,7 +597,6 @@
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
         updateThemeSelectorLabels(currentTheme);
 
-        // Client-side authentication component toggle handler
         const toRegisterBtn = document.getElementById('switchToRegister');
         const toLoginBtn = document.getElementById('switchToLogin');
         const loginModule = document.getElementById('login-module');
@@ -508,6 +616,15 @@
             });
         }
     });
+
+    function toggleMobileSidebarMenu() {
+        const sidebar = document.getElementById('mainSidebarNavigationWrapper');
+        const overlay = document.getElementById('mobileSidebarDimOverlay');
+        if(sidebar && overlay) {
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+    }
 
     function toggleSystemTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');

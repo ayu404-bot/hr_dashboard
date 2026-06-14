@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Employee
-from .forms import EmployeeForm
 import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
 from django.contrib.auth import logout as django_logout
 
 # ==========================================================
@@ -15,11 +16,8 @@ from django.contrib.auth import logout as django_logout
 
 # SYSTEM HOME INTERFACE & LOCK GATEWAY NODE
 def home_view(request):
-    # Agar user already logged in hai, toh direct dynamic cockpit dashboard load hoga
-    if request.user.is_authenticated:
-        return render(request, 'employees/home.html')
-    
-    # Agar login nahi hai, toh base.html automatic is par login window render karega
+    # Agar user already logged in hai ya unauthenticated hai, dono cases mein home template call hoga
+    # Aur hamara responsive base.html automatic custom views render kar lega
     return render(request, 'employees/home.html')
 
 
@@ -42,9 +40,10 @@ def login_page(request):
 def register_page(request):
     if request.method == "POST":
         fullname = request.POST.get('fullname')
-        username = request.POST.get('email').split('@')[0] # Corporate email ka first part username banega
         email = request.POST.get('email')
         password = request.POST.get('password')
+        
+        username = email.split('@')[0] # Corporate email ka first part username banega
 
         # Check agar user account already exists
         if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
@@ -69,11 +68,11 @@ def register_page(request):
     return redirect('home')
 
 
-# LOGOUT GATEWAY HANDLER
+# LOGOUT GATEWAY HANDLER (FIXED LOOP)
 def logout_view(request):
     django_logout(request)
     messages.info(request, "CONNECTION_TERMINATED // Core node safely disconnected from system.")
-    return redirect('login')
+    return redirect('home') # Home par bhejein taaki gate screen show ho ske smoothly
 
 
 # SYSTEM ABOUT Specs NODE
@@ -109,7 +108,6 @@ def dashboard(request):
 @login_required
 def add_employee(request):
     if request.method == "POST":
-        # Direct capture from the form fields to avoid validation lockups
         name = request.POST.get('name')
         email = request.POST.get('email')
         department = request.POST.get('department')
@@ -125,10 +123,10 @@ def add_employee(request):
             salary=salary,
             performance_score=performance_score,
             profile_pic=profile_pic,
-            attrition=False
+            attrition=False,
+            is_deleted=False
         )
 
-        # Trigger Pop-up and instantly clear memory registry route
         messages.success(request, f"SUCCESS // Agent record for '{name}' has been safely injected into core database.")
         return redirect('employee_list') 
         
@@ -142,10 +140,10 @@ def employee_list(request):
     return render(request, 'employees/employee_list.html', {'employees': all_employees})
 
 
-# UPDATE - EDIT AGENT STRUCTURAL RECONFIGURATIONS
+# UPDATE - EDIT AGENT STRUCTURAL RECONFIGURATIONS (TUNED TO PK KEYWORD)
 @login_required
 def update_employee(request, pk):
-    employee = get_object_or_404(Employee, id=pk)
+    employee = get_object_or_404(Employee, pk=pk)
     if request.method == "POST":
         employee.name = request.POST.get('name')
         employee.email = request.POST.get('email')
@@ -153,7 +151,6 @@ def update_employee(request, pk):
         employee.salary = request.POST.get('salary')
         employee.performance_score = request.POST.get('performance_score')
         
-        # Request context parsing correct bugs fixed
         if request.FILES.get('profile_pic'):
             employee.profile_pic = request.FILES.get('profile_pic')
 
@@ -165,23 +162,23 @@ def update_employee(request, pk):
 
         messages.success(request, f"UPDATED // Core variables for '{employee.name}' modified successfully.")
         return redirect('employee_list')
-    return render(request, 'employees/update_employee.html', {'form': employee})
+    return render(request, 'employees/update_employee.html', {'employee': employee})
 
 
-# DELETE - PURGE AN AGENT ROW INSTANCE COMPLETELY
+# DELETE - PURGE AN AGENT ROW INSTANCE COMPLETELY (SOFT DELETE LINKED)
 @login_required
 def delete_employee(request, pk):
-    employee = get_object_or_404(Employee, id=pk)
+    employee = get_object_or_404(Employee, pk=pk)
     employee.is_deleted = True
     employee.save()
-    messages.success(request, f"MOVED// '{employee.name}' record shifted to recycle bin node.")
+    messages.success(request, f"MOVED // '{employee.name}' record shifted to recycle bin node.")
     return redirect('employee_list')
 
 
 # READ - INDIVIDUAL PROFILE DETAILS HANDLER
 @login_required
 def employee_profile(request, pk):
-    employee = get_object_or_404(Employee, id=pk)
+    employee = get_object_or_404(Employee, pk=pk)
     return render(request, 'employees/employee_profile.html', {'employee': employee})
 
 
@@ -189,47 +186,127 @@ def employee_profile(request, pk):
 # 4. DATA PIPELINE FILE COMPILATION
 # ==========================================================
 
+
+
 @login_required
 def export_excel(request):
+    # Response stream initialize karna
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="employee_report.xlsx"'
+    response['Content-Disposition'] = 'attachment; filename="matrix_active_employees.xlsx"'
     
+    # Naya workbook aur sheet setup
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Employees"
+    ws.title = "Active Matrix Records"
     
-    headers = ['Name', 'Email', 'Department', 'Salary', 'Performance Score']
+    # Grid lines ko force-enable karna taaki sheet plain na dikhe
+    ws.views.sheetView[0].showGridLines = True
+    
+    # ✨ STYLING DEFINITIONS (Matrix Futuristic Theme)
+    header_fill = PatternFill(start_color="1F2937", end_color="1F2937", fill_type="solid") # Dark Gray/Blue Slate
+    header_font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF") # Sharp White Text
+    data_font = Font(name="Segoe UI", size=10, color="111827")
+    
+    # Borders configuration
+    thin_border = Border(
+        left=Side(style='thin', color='E5E7EB'),
+        right=Side(style='thin', color='E5E7EB'),
+        top=Side(style='thin', color='E5E7EB'),
+        bottom=Side(style='thin', color='E5E7EB')
+    )
+    
+    # Alignments
+    center_align = Alignment(horizontal="center", vertical="center")
+    left_align = Alignment(horizontal="left", vertical="center")
+    
+    # Excel Headers definition
+    headers = ['Employee Name', 'Email Address', 'Department', 'Current Salary', 'Performance Score', 'System Status']
     ws.append(headers)
     
-    for emp in Employee.objects.all():
-        # Added a fallback if salary node is non-numeric string
+    # Header styles apply karna
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = center_align
+        cell.border = thin_border
+    
+    # Row height badhana taaki breathing space mile
+    ws.row_dimensions[1].height = 26
+    
+    # 🔥 LIVE DATABASE QUERY (Filtering out deleted nodes)
+    active_employees = Employee.objects.filter(is_deleted=False)
+    
+    # Data rows populate karna
+    for row_idx, emp in enumerate(active_employees, start=2):
         try:
             salary_val = float(emp.salary)
         except (ValueError, TypeError):
             salary_val = 0.0
-        ws.append([emp.name, emp.email, emp.department, salary_val, emp.performance_score])
+            
+        status = "Left" if emp.attrition else "Active"
         
+        # Row append
+        ws.append([
+            emp.name, 
+            emp.email, 
+            emp.department, 
+            salary_val, 
+            emp.performance_score, 
+            status
+        ])
+        
+        # Current data row dimensions aur styles map karna
+        ws.row_dimensions[row_idx].height = 20
+        
+        # Styles formatting for every cells in this row
+        row_cells = ws[row_idx]
+        row_cells[0].alignment = left_align   # Name
+        row_cells[1].alignment = left_align   # Email
+        row_cells[2].alignment = center_align # Department
+        row_cells[3].alignment = left_align   # Salary
+        row_cells[4].alignment = center_align # Score
+        row_cells[5].alignment = center_align # Status
+        
+        # Number formatting for Salary column (Currency visual look)
+        row_cells[3].number_format = '₹#,##0.00'
+        
+        for cell in row_cells:
+            cell.font = data_font
+            cell.border = thin_border
+            
+    # 📐 AUTOMATIC COLUMN WIDTH FITTER ENGINE
+    # Yeh aapke data ki length ke hisab se columns ko auto-widen kar dega
+    for col in ws.columns:
+        max_len = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.value:
+                # Agar currency formatted cell hai toh thoda extra padding
+                val_str = f"₹{cell.value:,.2f}" if isinstance(cell.value, (int, float)) and cell.column == 4 else str(cell.value)
+                if len(val_str) > max_len:
+                    max_len = len(val_str)
+        ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
+        
+    # Save output to browser response stream
     wb.save(response)
     return response
 
 
 @login_required
 def help_view(request):
-    return render(request,'employees/help.html')
+    return render(request, 'employees/help.html')
 
 
 @login_required
 def recycle_bin_view(request):
     deleted_employees = Employee.objects.filter(is_deleted=True)
-    return render(request,'employees/recycle_bin.html', {'employees': deleted_employees})
+    return render(request, 'employees/recycle_bin.html', {'employees': deleted_employees})
+
 
 @login_required
 def restore_employee(request, pk):
-    employee = get_object_or_404(Employee, id=pk)
-    
-    # is_deleted ko wapas False kar do taaki ye active ho jaye
+    employee = get_object_or_404(Employee, pk=pk)
     employee.is_deleted = False
     employee.save()
-    
     messages.success(request, f"RESTORED // Node '{employee.name}' has been safely re-allocated to active matrix.")
-    return redirect('recycle_bin') # Ya jo bhi aapke recycle bin ka URL name hai
+    return redirect('recycle_bin')
