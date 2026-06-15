@@ -174,11 +174,12 @@
 {% block page_description %}Secure structural workspace nodes and dynamic real-time data terminal mapping.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-1">
+<div class="container-fluid px-3">
     <div class="row g-4">
+        
         <div class="col-xl-8 col-lg-7 d-flex flex-column gap-4">
             
-            <div class="card hud-card h-100 d-flex flex-column justify-content-between">
+            <div class="card hud-card d-flex flex-column justify-content-between p-4">
                 <div>
                     <h4 class="text-uppercase mb-3 theme-adaptive-header d-flex align-items-center gap-2" style="font-size: 19px;">
                         <i class="bi bi-terminal-fill text-shadow-glow" style="color: var(--accent);"></i> 
@@ -198,16 +199,18 @@
                         {% endif %}
                     </p>
                     
-                    <div class="p-3 rounded font-monospace my-4" style="background: rgba(51, 194, 163, 0.05); border: 1px dashed var(--accent); font-size: 12px; color: var(--accent);">
+                    <div class="p-3 rounded font-monospace my-4" style="background: rgba(51, 194, 163, 0.05); border: 1px dashed var(--accent); font-size: 12px; color: var(--accent); width: 100%;">
                         <span class="d-inline-block spinning-radar-glow me-1"><i class="bi bi-patch-check-fill"></i></span> 
                         &gt;&gt; SECURE_LOG: Identity verified for [{{ user.email }}]. Clearance Level: {% if user.is_superuser %}ROOT_ROOT{% elif user.is_staff %}STAFF_NODE{% else %}EMPLOYEE_NODE{% endif %}. Handshake stable.
                     </div>
                 </div>
                 
-                <div class="col-12 col-md-4 mx-auto mb-3">
-                    <a href="{% url 'dashboard' %}" class="btn btn-neon-pulse font-monospace text-uppercase fw-bold px-4 py-3 d-block text-center" style="font-size: 12px; letter-spacing: 2px; border-radius: 14px;">
-                    <i class="bi bi-cursor-fill me-2"></i> Launch Main Analytics Matrix
-                    </a>
+                <div class="row w-100 m-0 pt-2">
+                    <div class="col-12 col-md-6 p-0">
+                        <a href="{% url 'dashboard' %}" class="btn btn-neon-pulse font-monospace text-uppercase fw-bold px-4 py-3 text-center" style="font-size: 12px; letter-spacing: 2px; border-radius: 14px; width: 100%;">
+                            <i class="bi bi-cursor-fill me-2"></i> Launch Main Analytics Matrix
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -269,43 +272,45 @@
         </div>
 
         <div class="col-xl-4 col-lg-5 d-flex flex-column gap-3">
-            <div class="card hud-card h-100 d-flex flex-column justify-content-between gap-3">
-                <div class="border-bottom border-secondary border-opacity-10 pb-2">
-                    <h6 class="font-monospace text-uppercase text-info tracking-wider m-0" style="font-size: 12px;">
-                        <i class="bi bi-hdd-network-fill me-1"></i> Telemetry Sync Stream
-                    </h6>
-                </div>
-
-                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">System Status</small>
-                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">MAINFRAME_ONLINE</span>
+            <div class="card hud-card h-100 d-flex flex-column justify-content-between gap-3 p-4">
+                <div>
+                    <div class="border-bottom border-secondary border-opacity-10 pb-2 mb-3">
+                        <h6 class="font-monospace text-uppercase text-info tracking-wider m-0" style="font-size: 12px;">
+                            <i class="bi bi-hdd-network-fill me-1"></i> Telemetry Sync Stream
+                        </h6>
                     </div>
-                    <span class="badge bg-success bg-opacity-25 text-success font-monospace" style="font-size: 9px;">SECURE</span>
-                </div>
 
-                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Active Identity Node</small>
-                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">@{{ user.username }}</span>
+                    <div class="telemetry-node-box d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">System Status</small>
+                            <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">MAINFRAME_ONLINE</span>
+                        </div>
+                        <span class="badge bg-success bg-opacity-25 text-success font-monospace" style="font-size: 9px;">SECURE</span>
                     </div>
-                    <span class="badge bg-info bg-opacity-25 text-info font-monospace" style="font-size: 9px;">AUTHENTICATED</span>
-                </div>
 
-                <div class="telemetry-node-box d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Access Clearance</small>
-                        <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">
-                            {% if user.is_superuser %}
-                                ROOT_ADMIN
-                            {% elif user.is_staff %}
-                                HR_STAFF
-                            {% else %}
-                                STANDARD_EE
-                            {% endif %}
-                        </span>
+                    <div class="telemetry-node-box d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Active Identity Node</small>
+                            <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">@{{ user.username }}</span>
+                        </div>
+                        <span class="badge bg-info bg-opacity-25 text-info font-monospace" style="font-size: 9px;">AUTHENTICATED</span>
                     </div>
-                    <span class="badge bg-warning bg-opacity-25 text-warning font-monospace" style="font-size: 9px;">AUTHORIZED</span>
+
+                    <div class="telemetry-node-box d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <small class="d-block font-monospace text-uppercase tracking-wider text-muted" style="font-size: 9px;">Access Clearance</small>
+                            <span class="font-monospace fw-bold cyber-status-text" style="font-size: 13px;">
+                                {% if user.is_superuser %}
+                                    ROOT_ADMIN
+                                {% elif user.is_staff %}
+                                    HR_STAFF
+                                {% else %}
+                                    STANDARD_EE
+                                {% endif %}
+                            </span>
+                        </div>
+                        <span class="badge bg-warning bg-opacity-25 text-warning font-monospace" style="font-size: 9px;">AUTHORIZED</span>
+                    </div>
                 </div>
 
                 <div class="pt-2 border-top border-secondary border-opacity-10 text-center font-monospace" style="font-size: 10px;">

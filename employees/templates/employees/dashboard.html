@@ -90,9 +90,9 @@
     </div>
 </div>
 
-<div class="row g-4 justify-content-center align-items-stretch mb-2">
+<div class="row g-4 justify-content-center">
     <div class="col-12 col-xl-7 col-lg-6">
-        <div class="instructor-panel shadow-lg h-100">
+        <div class="instructor-panel shadow-lg p-4">
             <div class="hud-stage">
                 <div class="anime-teacher-vector">
                     <div class="teacher-hair-back"></div>
@@ -116,25 +116,25 @@
                     <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-primary" style="font-size: 11px;">PHASE 1: NODE_MIGRATION</strong>
-                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Initial system setup executing raw recruitment data indexing, mapping, and connection routing initialization.</p>
+                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Initial system setup executing raw indexing data parameters.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-success" style="font-size: 11px;">PHASE 2: TELEMETRY_RENDER</strong>
-                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Compiling real-time calculations to build metrics logs, analytics charts, and telemetry status rows.</p>
+                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Compiling real-time calculations to build metrics logs.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-warning" style="font-size: 11px;">PHASE 3: STATE_SYNCHRONIZATION</strong>
-                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Global alignment matching active localStorage state layers to adjust stylesheets across views cleanly.</p>
+                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Global alignment matching active localStorage layers.</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="p-2 rounded phase-box">
                             <strong class="text-danger" style="font-size: 11px;">PHASE 4: LIVE_DEPLOYMENT</strong>
-                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Mainframe environment online, dynamically tracking operational records and processing telemetry cycles.</p>
+                            <p class="m-0 theme-adaptive-muted mt-1" style="font-size: 10px; line-height: 1.4;">Mainframe environment online tracking operational syncs.</p>
                         </div>
                     </div>
                 </div>
@@ -142,13 +142,14 @@
         </div>
     </div>
     
-    <div class="col-12 col-xl-5 col-lg-6">
-        <div class="ai-avatar-box shadow-lg h-100 d-flex flex-column justify-content-center py-4">
-            <div class="text-info small font-monospace mb-3 border-bottom border-secondary pb-2">
+   <div class="col-12 col-xl-5 col-lg-6">
+        <div class="ai-avatar-box shadow-lg p-4 h-100 d-flex flex-column align-items-center justify-content-start" style="min-height: 380px;">
+            <div class="text-info small font-monospace w-100 mb-4 border-bottom border-secondary pb-2">
                 <i class="bi bi-headset me-1"></i> Mainframe Operator AI
             </div>
-            <div class="anime-character-hud" style="overflow: visible !important;">
-                <div class="headphone-3d-wrapper">
+            
+            <div class="anime-character-hud d-flex align-items-center justify-content-center mb-3">
+                <div class="headphone-3d-wrapper" style="position: relative; top: auto; left: auto; margin: 0;">
                     <div class="hp-headband"></div>
                     <div class="hp-earcup cup-left">
                         <div class="hp-glow-ring"></div>
@@ -159,7 +160,8 @@
                     <div class="hp-cushion-crossover"></div>
                 </div>
             </div>
-            <div class="text-center mt-3">
+            
+            <div class="text-center w-100 mt-2">
                 <span class="badge bg-dark border border-info text-info font-monospace mb-2">SYSTEM_ASSISTANT // CORE_NEO</span>
                 <p class="small m-0 px-2 font-monospace theme-adaptive-muted" style="font-size: 11px; line-height: 1.5;">
                     "Welcome back, Operator. Combined data tracking charts have initialized successfully across all active system channels."
@@ -167,7 +169,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -178,7 +179,6 @@
         let statusChartInstance = null;
         let masterChartInstance = null;
 
-        // Dynamic Parsing values straight from Django engine
         const totalHeadcount = parseInt("{{ total|default:0 }}");
         const activeNodes = parseInt("{{ active|default:0 }}");
         const attritionLoss = parseInt("{{ left|default:0 }}");
@@ -199,19 +199,14 @@
             if(statusChartInstance) statusChartInstance.destroy();
             if(masterChartInstance) masterChartInstance.destroy();
 
-            // 1. Appointed Department Chart
             deptChartInstance = new Chart(document.getElementById('deptDoughnutChart'), { type: 'doughnut', data: { labels: ['HR Node', 'Tech Node', 'Sales Node', 'Admin Node'], datasets: [{ data: [activeNodes * 2, totalHeadcount * 3, 5, 2], backgroundColor: ['#0d6efd', '#33c2a3', '#ffc107', '#6c757d'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 9 }, color: chartTextColor } } } } });
             
-            // 2. Salary Scale Metrics Area Chart
             salaryChartInstance = new Chart(document.getElementById('salaryAreaChart'), { type: 'line', data: { labels: ['Min', 'Avg', 'Current', 'Max'], datasets: [{ label: 'Scale (₹)', data: [25000, 35000 + (totalHeadcount * 2000), 50000 + (activeNodes * 4000), 95000], borderColor: '#33c2a3', backgroundColor: currentActiveTheme === 'light' ? 'rgba(51, 194, 163, 0.2)' : 'rgba(51, 194, 163, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: chartTextColor } }, y: { grid: { color: gridLinesColor }, ticks: { color: chartTextColor } } } } });
             
-            // 3. Operational Performance Radar Chart
             performanceChartInstance = new Chart(document.getElementById('performanceRadarChart'), { type: 'radar', data: { labels: ['Output', 'Speed', 'Resource', 'Uptime', 'Logic'], datasets: [{ label: 'Operational Metrics', data: [75 + activeNodes, 80 + totalHeadcount, 70, 95, 85], borderColor: '#ffc107', backgroundColor: 'rgba(255, 193, 7, 0.15)', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: radialGridColor }, angleLines: { color: radialGridColor }, ticks: { display: false }, pointLabels: { font: { size: 8, weight: 'bold' }, color: chartTextColor } } } } });
             
-            // 4. System Nodes Status Bar Chart
             statusChartInstance = new Chart(document.getElementById('statusHorizontalBarChart'), { type: 'bar', data: { labels: ['Active', 'Wiped'], datasets: [{ data: [activeNodes, attritionLoss], backgroundColor: ['#1ca88f', '#ff6b78'], borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, beginAtZero: true, ticks: { precision: 0, color: chartTextColor } }, y: { grid: { display: false }, ticks: { color: chartTextColor } } } } });
 
-            // 5. Total Analysis Master List Chart
             masterChartInstance = new Chart(document.getElementById('mainframeMasterListChart'), { type: 'line', data: { labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'], datasets: [{ label: 'Mainframe Load', data: [30, 50, 45, 70 + activeNodes], borderColor: '#0d6efd', backgroundColor: currentActiveTheme === 'light' ? 'rgba(13, 110, 253, 0.2)' : 'rgba(13, 110, 253, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: chartTextColor } }, y: { grid: { color: gridLinesColor }, ticks: { color: chartTextColor } } } } });
         }
 
@@ -231,10 +226,8 @@
 
 {% block extra_css %}
 <style>
-    /* Advanced 3D Core View Space Setup */
     body { perspective: 1600px; transform-style: preserve-3d; }
     
-    /* RADICAL HIGH-ATTRACTION 3D LOGO SPIN SYSTEM */
     .sidebar .rounded-circle i,
     .bi-grid-3x3-gap-fill {
         display: inline-block !important;
@@ -247,7 +240,6 @@
         100% { transform: rotateY(360deg) scale(1); filter: drop-shadow(0 0 4px var(--accent)); }
     }
 
-    /* Adaptable Font Synchronization Layers */
     .theme-adaptive-text { color: var(--text) !important; transition: color 0.2s ease; }
     .theme-adaptive-muted { color: var(--text-muted) !important; transition: color 0.2s ease; }
 
@@ -256,7 +248,6 @@
     [data-theme="light"] .page-header h1, 
     [data-theme="light"] .page-header p { color: #111827 !important; }
     
-    /* Telemetry Panel Surface Formats */
     .stat-card {
         background: var(--surface) !important;
         border: 1px solid var(--border) !important;
@@ -286,7 +277,6 @@
     }
     .instructor-panel:hover { transform: rotateX(0deg) rotateY(0deg) translateY(-3px) translateZ(25px); box-shadow: var(--shadow); }
     
-    /* MODIFIED HUD STAGE TO FLEX AND COPE RESPONSIVELY UNDER PHONES */
     .hud-stage { 
         display: flex; 
         align-items: center; 
@@ -298,12 +288,10 @@
     }
     .master-chart-box { flex-grow: 1; height: 220px; position: relative; transform: translateZ(15px); width: 100%; }
 
-    /* Explanation Boxes Inside Theme */
     .phase-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); transition: transform 0.2s ease; }
     .phase-box:hover { transform: translateZ(10px) scale(1.02); background: rgba(255, 255, 255, 0.05); }
     [data-theme="light"] .phase-box { background: rgba(15, 23, 42, 0.03); }
 
-    /* HIGH-ATTRACTION 3D MODEL ANIME TEACHER VECTOR STYLES */
     .anime-teacher-vector { 
         position: relative; 
         width: 140px; 
@@ -399,11 +387,9 @@
         50% { transform: translateZ(25px) rotate(-35deg); box-shadow: 0 0 22px var(--accent); }
     }
 
-    /* SYSTEM OPERATOR ACTIVE FRAME MOTIONS */
     .ai-avatar-box { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 18px; padding: 22px; transform: translateZ(5px); }
     .anime-character-hud { position: relative; width: 100px; height: 100px; margin: 0 auto; background: rgba(51, 194, 163, 0.05); border-radius: 50%; border: 1px solid var(--border); }
 
-    /* DYNAMIC 3D HEADPHONE VECTOR LOGO ENGINE */
     .headphone-3d-wrapper {
         position: absolute;
         top: 50%;
@@ -473,7 +459,6 @@
         50% { opacity: 1; box-shadow: 0 0 12px #ff6b78; }
     }
     
-    /* ADDITIONAL MEDIA QUERIES FOR COMPACT WIDTH HANDLES */
     @media (max-width: 767.98px) {
         .hud-stage { flex-direction: column-reverse !important; align-items: center !important; }
         .master-chart-box { height: 180px !important; }

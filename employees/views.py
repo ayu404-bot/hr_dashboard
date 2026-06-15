@@ -16,8 +16,6 @@ from django.contrib.auth import logout as django_logout
 
 # SYSTEM HOME INTERFACE & LOCK GATEWAY NODE
 def home_view(request):
-    # Agar user already logged in hai ya unauthenticated hai, dono cases mein home template call hoga
-    # Aur hamara responsive base.html automatic custom views render kar lega
     return render(request, 'employees/home.html')
 
 
@@ -72,7 +70,7 @@ def register_page(request):
 def logout_view(request):
     django_logout(request)
     messages.info(request, "CONNECTION_TERMINATED // Core node safely disconnected from system.")
-    return redirect('home') # Home par bhejein taaki gate screen show ho ske smoothly
+    return redirect('home')
 
 
 # SYSTEM ABOUT Specs NODE
@@ -133,11 +131,16 @@ def add_employee(request):
     return render(request, 'employees/add_employee.html')
 
 
-# READ - VIEW ALL LOGGED AGENT MATRIX LISTS
+# READ - VIEW ALL LOGGED AGENT MATRIX LISTS (FIXED & COMPLETED)
 @login_required
 def employee_list(request):
-    all_employees = Employee.objects.filter(is_deleted=False)
-    return render(request, 'employees/employee_list.html', {'employees': all_employees})
+    try:
+        # Django mein order_index() nahi hota, order_by() hota hai. Fallback safe lagaya hai id par.
+        employees = Employee.objects.filter(is_deleted=False).order_by('id')
+    except Exception:
+        employees = Employee.objects.filter(is_deleted=False)
+    
+    return render(request, 'employees/employee_list.html', {'employees': employees})
 
 
 # UPDATE - EDIT AGENT STRUCTURAL RECONFIGURATIONS (TUNED TO PK KEYWORD)
@@ -186,28 +189,22 @@ def employee_profile(request, pk):
 # 4. DATA PIPELINE FILE COMPILATION
 # ==========================================================
 
-
-
+# EXPORT EXCEL DATAFRAME (FIXED TRY-EXCEPT LOGIC)
 @login_required
 def export_excel(request):
-    # Response stream initialize karna
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="matrix_active_employees.xlsx"'
     
-    # Naya workbook aur sheet setup
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Active Matrix Records"
     
-    # Grid lines ko force-enable karna taaki sheet plain na dikhe
     ws.views.sheetView[0].showGridLines = True
     
-    # ✨ STYLING DEFINITIONS (Matrix Futuristic Theme)
-    header_fill = PatternFill(start_color="1F2937", end_color="1F2937", fill_type="solid") # Dark Gray/Blue Slate
-    header_font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF") # Sharp White Text
+    header_fill = PatternFill(start_color="1F2937", end_color="1F2937", fill_type="solid") 
+    header_font = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF") 
     data_font = Font(name="Segoe UI", size=10, color="111827")
     
-    # Borders configuration
     thin_border = Border(
         left=Side(style='thin', color='E5E7EB'),
         right=Side(style='thin', color='E5E7EB'),
@@ -215,79 +212,72 @@ def export_excel(request):
         bottom=Side(style='thin', color='E5E7EB')
     )
     
-    # Alignments
     center_align = Alignment(horizontal="center", vertical="center")
     left_align = Alignment(horizontal="left", vertical="center")
     
-    # Excel Headers definition
     headers = ['Employee Name', 'Email Address', 'Department', 'Current Salary', 'Performance Score', 'System Status']
     ws.append(headers)
     
-    # Header styles apply karna
     for cell in ws[1]:
         cell.fill = header_fill
         cell.font = header_font
         cell.alignment = center_align
         cell.border = thin_border
     
-    # Row height badhana taaki breathing space mile
     ws.row_dimensions[1].height = 26
     
-    # 🔥 LIVE DATABASE QUERY (Filtering out deleted nodes)
     active_employees = Employee.objects.filter(is_deleted=False)
     
-    # Data rows populate karna
     for row_idx, emp in enumerate(active_employees, start=2):
+        # Salary Conversion Logic
         try:
-            salary_val = float(emp.salary)
+            salary_val = float(emp.salary) if emp.salary else 0.0
         except (ValueError, TypeError):
             salary_val = 0.0
+
+        # Performance Score Conversion Logic (Fixed Scope)
+        try:
+            score_val = float(emp.performance_score) if emp.performance_score else 0.0
+        except (ValueError, TypeError):
+            score_val = 0.0            
             
         status = "Left" if emp.attrition else "Active"
         
-        # Row append
         ws.append([
             emp.name, 
             emp.email, 
             emp.department, 
             salary_val, 
-            emp.performance_score, 
+            score_val, 
             status
         ])
         
-        # Current data row dimensions aur styles map karna
         ws.row_dimensions[row_idx].height = 20
         
-        # Styles formatting for every cells in this row
         row_cells = ws[row_idx]
-        row_cells[0].alignment = left_align   # Name
-        row_cells[1].alignment = left_align   # Email
-        row_cells[2].alignment = center_align # Department
-        row_cells[3].alignment = left_align   # Salary
-        row_cells[4].alignment = center_align # Score
-        row_cells[5].alignment = center_align # Status
+        row_cells[0].alignment = left_align   
+        row_cells[1].alignment = left_align   
+        row_cells[2].alignment = center_align 
+        row_cells[3].alignment = left_align   
+        row_cells[4].alignment = center_align 
+        row_cells[5].alignment = center_align 
         
-        # Number formatting for Salary column (Currency visual look)
         row_cells[3].number_format = '₹#,##0.00'
         
         for cell in row_cells:
             cell.font = data_font
             cell.border = thin_border
             
-    # 📐 AUTOMATIC COLUMN WIDTH FITTER ENGINE
-    # Yeh aapke data ki length ke hisab se columns ko auto-widen kar dega
     for col in ws.columns:
         max_len = 0
         col_letter = get_column_letter(col[0].column)
         for cell in col:
             if cell.value:
-                # Agar currency formatted cell hai toh thoda extra padding
                 val_str = f"₹{cell.value:,.2f}" if isinstance(cell.value, (int, float)) and cell.column == 4 else str(cell.value)
                 if len(val_str) > max_len:
                     max_len = len(val_str)
         ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
         
-    # Save output to browser response stream
     wb.save(response)
     return response
 

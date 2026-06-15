@@ -39,8 +39,9 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-tech table-hover m-0 w-100">
+        <!-- BULLETPROOF RESPONSIVE WRAPPER (FIXED STYLING CLASH) -->
+        <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table class="table table-surface m-0">
                 <thead>
                     <tr>
                         <th>Agent Identifier</th>
@@ -63,7 +64,7 @@
                         <td><a href="mailto:{{ emp.email }}" class="email-telemetry-link">{{ emp.email }}</a></td>
                         <td><span class="badge bg-dark border border-secondary text-info px-2 py-1.5" style="font-size: 11px;">{{ emp.department }}</span></td>
                         <td class="text-success fw-semibold font-monospace">₹{{ emp.salary }}</td>
-                        <td class="text-warning fw-bold"><i class="bi bi-cpu me-1"></i> {{ emp.performance_score }}</td>
+                        <td class="text-warning fw-bold"><i class="bi bi-cpu me-1"></i> {{ emp.performance_score|default:"0.0" }}</td>
                         <td>
                             {% if emp.attrition %}
                                 <span class="status-badge bg-danger text-white">Left</span>
@@ -111,8 +112,9 @@
         border-color: var(--accent) !important; 
     }
 
-    .table-tech { color: var(--text) !important; vertical-align: middle; border-collapse: separate; border-spacing: 0 6px; }
-    .table-tech th { 
+    /* FIXED: Changed from .table-tech to .table-surface to match HTML target */
+    .table-surface { color: var(--text) !important; vertical-align: middle; border-collapse: separate; border-spacing: 0 6px; width: 100%; white-space: nowrap; }
+    .table-surface th { 
         color: var(--accent) !important; 
         font-size: 11px; 
         text-transform: uppercase; 
@@ -120,8 +122,9 @@
         font-weight: 700; 
         border-bottom: 2px solid var(--border) !important; 
         padding: 16px 14px; 
+        background: transparent !important;
     }
-    .table-tech td { 
+    .table-surface td { 
         background-color: rgba(22, 27, 34, 0.2) !important; 
         border: 1px solid var(--border) !important; 
         border-left: none !important; border-right: none !important; 
@@ -130,17 +133,17 @@
         font-family: monospace !important; 
         color: var(--text) !important;
     }
-    [data-theme="light"] .table-tech td { background-color: rgba(15, 23, 42, 0.02) !important; }
+    [data-theme="light"] .table-surface td { background-color: rgba(15, 23, 42, 0.02) !important; color: var(--text) !important; }
 
-    .table-tech tbody td:first-child { border-left: 2px solid transparent !important; border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
-    .table-tech tbody td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
-    .table-tech tbody tr:hover td { background-color: rgba(51, 194, 163, 0.08) !important; border-top-color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
-    .table-tech tbody tr:hover td:first-child { border-left-color: var(--accent) !important; }
+    .table-surface tbody td:first-child { border-left: 2px solid transparent !important; border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+    .table-surface tbody td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+    .table-surface tbody tr:hover td { background-color: rgba(51, 194, 163, 0.08) !important; border-top-color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
+    .table-surface tbody tr:hover td:first-child { border-left-color: var(--accent) !important; }
     
     .email-telemetry-link { color: #00d2ff !important; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
     .email-telemetry-link:hover { opacity: 0.8; text-decoration: underline; }
     
-    .status-badge { font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-badge { font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; }
     
     .btn-mod-node { color: var(--accent) !important; border: 1px solid var(--border) !important; background: rgba(51, 194, 163, 0.05); font-size: 11px; font-weight: 700; text-transform: uppercase; border-radius: 8px; transition: all 0.2s; }
     .btn-mod-node:hover { background: var(--accent) !important; color: #ffffff !important; }
@@ -156,7 +159,6 @@
         font-size: 12px !important; 
         border-radius: 10px !important;
         box-shadow: 0 0 15px rgba(51, 194, 163, 0.4) !important; 
-        animation: neon-breathing-loop 2.5s infinite ease-in-out; 
     }
 
     .cyber-toast-alert {

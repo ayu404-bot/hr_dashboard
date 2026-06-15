@@ -1,91 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Initialize New Agent Node</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body { 
-            background: #020304;
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            color: #ffffff; 
-            padding: 60px 0;
-            overflow-x: hidden;
-            perspective: 1400px;
-        }
-        .grid-overlay {
-            position: fixed;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background-image: linear-gradient(rgba(32, 201, 151, 0.02) 1.5px, transparent 1.5px),
-                              linear-gradient(90deg, rgba(32, 201, 151, 0.02) 1.5px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotateX(65deg) translateZ(-150px);
-            transform-origin: center center;
-            pointer-events: none;
-            z-index: 0;
-            animation: space-matrix-drift 30s infinite linear;
-        }
-        @keyframes space-matrix-drift {
-            0% { transform: rotateX(65deg) translateZ(-150px) translateY(0px); }
-            100% { transform: rotateX(65deg) translateZ(-150px) translateY(50px); }
-        }
-        .main-hud-wrapper { position: relative; z-index: 1; }
-        .form-card { 
-            background: rgba(13, 17, 23, 0.65) !important; 
-            border: 2px solid #20c997 !important;
-            border-radius: 20px !important; 
-            backdrop-filter: blur(15px);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(32, 201, 151, 0.15) !important;
-            border-top-right-radius: 50px !important; 
-            transform: rotateX(3deg) rotateY(-1.5deg) translateZ(20px);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            max-width: 650px;
-            margin: 0 auto;
-        }
-        .form-card:hover {
-            border-color: #23dba5 !important;
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.95), 0 0 65px rgba(32, 201, 151, 0.25) !important;
-        }
-        .form-control, .form-select {
-            background-color: rgba(22, 27, 34, 0.8) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            color: #ffffff !important;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 12px;
-        }
-        .form-control:focus, .form-select:focus {
-            background-color: rgba(13, 17, 23, 0.95) !important;
-            border-color: #20c997 !important;
-            box-shadow: 0 0 12px rgba(32, 201, 151, 0.4) !important;
-        }
-        .form-label {
-            color: #20c997; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px;
-        }
-        .btn-execute-add {
-            background: linear-gradient(135deg, #20c997 0%, #138563 100%) !important;
-            border: 1px solid #ffffff !important; color: #ffffff !important; font-weight: 800 !important; font-size: 14px !important; width: 100%;
-            box-shadow: 0 0 15px rgba(32, 201, 151, 0.4) !important; transition: all 0.3s;
-        }
-        .btn-execute-add:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(32, 201, 151, 0.7) !important; }
-    </style>
-</head>
-<body>
+{% extends "employees/base.html" %}
 
-<div class="grid-overlay"></div>
+{% block title %}Initialize New Agent Node{% endblock %}
 
-<div class="container main-hud-wrapper">
+{% block page_title %}Initialize New Record{% endblock %}
+{% block page_description %}<span class="text-success font-monospace" style="font-size: 12px;">[TARGET SYSTEM: SQLITE_INSERT_ROW]</span>{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Premium Grid Overlay Drift Effect */
+    .grid-overlay-form {
+        position: fixed;
+        top: -50%; left: -50%; width: 200%; height: 200%;
+        background-image: linear-gradient(rgba(32, 201, 151, 0.02) 1.5px, transparent 1.5px),
+                          linear-gradient(90deg, rgba(32, 201, 151, 0.02) 1.5px, transparent 1px);
+        background-size: 50px 50px;
+        transform: rotateX(65deg) translateZ(-150px);
+        transform-origin: center center;
+        pointer-events: none;
+        z-index: 0;
+        animation: space-matrix-drift 30s infinite linear;
+    }
+    @keyframes space-matrix-drift {
+        0% { transform: rotateX(65deg) translateZ(-150px) translateY(0px); }
+        100% { transform: rotateX(65deg) translateZ(-150px) translateY(50px); }
+    }
+
+    /* Core Responsive HUD Card Container */
+    .form-card { 
+        background: rgba(13, 17, 23, 0.65) !important; 
+        border: 2px solid #20c997 !important;
+        border-radius: 20px !important; 
+        backdrop-filter: blur(15px);
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(32, 201, 151, 0.15) !important;
+        border-top-right-radius: 50px !important; 
+        transform: rotateX(3deg) rotateY(-1.5deg) translateZ(20px);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        max-width: 650px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 5;
+    }
+    .form-card:hover {
+        transform: rotateX(0deg) rotateY(0deg) translateY(-2px) translateZ(25px);
+        border-color: #23dba5 !important;
+        box-shadow: 0 50px 100px rgba(0, 0, 0, 0.95), 0 0 65px rgba(32, 201, 151, 0.25) !important;
+    }
+    .form-control, .form-select {
+        background-color: rgba(22, 27, 34, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 12px;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(13, 17, 23, 0.95) !important;
+        border-color: #20c997 !important;
+        box-shadow: 0 0 12px rgba(32, 201, 151, 0.4) !important;
+        color: #ffffff !important;
+    }
+    .form-label {
+        color: #20c997; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px;
+    }
+    .btn-execute-add {
+        background: linear-gradient(135deg, #20c997 0%, #138563 100%) !important;
+        border: 1px solid rgba(255,255,255,0.15) !important; 
+        color: #ffffff !important; 
+        font-weight: 800 !important; 
+        font-size: 14px !important; 
+        width: 100%;
+        box-shadow: 0 0 15px rgba(32, 201, 151, 0.4) !important; 
+        transition: all 0.3s;
+    }
+    .btn-execute-add:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(32, 201, 151, 0.7) !important; color: #ffffff !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="grid-overlay-form"></div>
+
+<div class="container px-0 position-relative" style="z-index: 10;">
     <div class="card form-card p-4 shadow-lg">
         
-        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-25 pb-3">
             <div class="d-flex align-items-center">
-                <a href="/employees/" class="btn btn-outline-secondary btn-sm me-3 text-secondary border-secondary">
+                <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary btn-sm me-3 border-opacity-50">
                     <i class="bi bi-arrow-left"></i>
                 </a>
                 <div>
-                    <h4 class="fw-bold m-0 text-white text-uppercase tracking-wider"><i class="bi bi-person-plus-fill text-success me-2"></i>Initialize New Record</h4>
-                    <small class="text-muted small" style="font-family: monospace;">TARGET SYSTEM: SQLITE_INSERT_ROW</small>
+                    <h5 class="fw-bold m-0 text-white text-uppercase tracking-wider d-none d-sm-block">
+                        <i class="bi bi-person-plus-fill text-success me-2"></i>Initialize New Record
+                    </h5>
+                    <h5 class="fw-bold m-0 text-white text-uppercase tracking-wider d-block d-sm-none" style="font-size: 14px;">
+                        <i class="bi bi-person-plus-fill text-success me-2"></i>New Agent Node
+                    </h5>
+                    <small class="text-muted font-monospace" style="font-size: 10px;">ENVIRONMENT: CORE_INJECT_GATEWAY</small>
                 </div>
             </div>
         </div>
@@ -104,7 +112,7 @@
             </div>
 
             <div class="row g-3 mb-3">
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <label class="form-label">Appointed Dept Node</label>
                     <select name="department" id="deptSelect" class="form-select" required onchange="toggleCustomDept()">
                         <option value="HR" selected>Human Resources (HR Node)</option>
@@ -114,7 +122,7 @@
                         <option value="Other">Other (Specify Custom Node...)</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <label class="form-label">Salary Scale Capacity (₹)</label>
                     <input type="number" name="salary" class="form-control" placeholder="INR Value Scale" required>
                 </div>
@@ -126,11 +134,11 @@
             </div>
 
             <div class="row g-3 mb-4">
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <label class="form-label">Performance Metric Core (1-10)</label>
                     <input type="number" step="0.1" min="1" max="10" name="performance_score" class="form-control" value="5.0" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-12 col-md-6">
                     <label class="form-label text-info"><i class="bi bi-image"></i> Profile Matrix Image</label>
                     <input type="file" name="profile_pic" class="form-control" accept="image/*">
                 </div>
@@ -163,6 +171,4 @@ function toggleCustomDept() {
     }
 }
 </script>
-
-</body>
-</html>
+{% endblock %}
